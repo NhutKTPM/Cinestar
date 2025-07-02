@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<nav th:fragment="navbar"
+     class="navbar navbar-expand-lg navbar-dark bg-secondary-subtle border-bottom"
+>
+    <div class="container-fluid">
+        <a class="navbar-brand montserrat-display fs-2 text-warning" href="/"
+        >CINESTAR</a
+        >
+
+        <form class="d-flex me-auto" role="search">
+            <input
+                    class="form-control me-2"
+                    type="search"
+                    placeholder="Tìm phim, rạp"
+                    aria-label="Search"
+            />
+            <button class="btn btn-warning" type="submit">Tìm</button>
+        </form>
+
+        <ul class="navbar-nav mb-0">
+            <li class="nav-item">
+                <a
+                        class="nav-link active fw-bold d-flex flex-column align-items-center montserrat-bold"
+                        href="/"
+                >
+                    <i class="bi bi-camera-reels-fill"></i> Phim</a
+                >
+            </li>
+            <li class="nav-item">
+                <a
+                        class="nav-link active fw-bold d-flex flex-column align-items-center montserrat-bold"
+                        href="/"
+                >
+                    <i class="bi bi-film"></i> Rạp</a
+                >
+            </li>
+            <li class="nav-item">
+                <a
+                        class="nav-link active fw-bold d-flex flex-column align-items-center montserrat-bold"
+                        href="/"
+                >
+                    <i class="bi bi-gift-fill"></i> Quà tặng</a
+                >
+            </li>
+            <li class="nav-item">
+                <a
+                        class="nav-link active fw-bold d-flex flex-column align-items-center montserrat-bold"
+                        href="/"
+                >
+                    <i class="bi bi-list-task"></i> Tin tức</a
+                >
+            </li>
+            <li class="nav-item">
+                <a
+                        class="nav-link active fw-bold d-flex flex-column align-items-center montserrat-bold"
+                        href="/"
+                >
+                    <i class="bi bi-person-circle"></i> Đăng nhập</a
+                >
+            </li>
+        </ul>
+
+
+    </div>
+</nav>
+</body>
+</html>

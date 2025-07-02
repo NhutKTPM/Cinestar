@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+
+
+<a th:fragment="movieCard(movie)" th:href="@{/movie/{id}(id=${movie.movieId})}" class="card h-100 bg-transparent border-0 rounded-0">
+    <div class="ratio" style="--bs-aspect-ratio: 147.917%;">
+        <img th:src="@{${movie.poster}}" class="card-img-top object-fit-cover rounded-0"/>
+    </div>
+    <div class="card-body ps-0">
+        <h5 class="card-title montserrat-bold" style="height: 3.1rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;" th:text="${movie.movieName}">Tên phim</h5>
+    </div>
+</a>
+
+
+<div th:fragment="cart(showtime)" class="col-4 ">
+    <div class="border p-3">
+        <div class="row mb-1">
+            <div class="col-12 text-primary montserrat-bold">Thông tin vé</div>
+        </div>
+        <div class="row d-flex">
+            <img
+                    th:src="@{${showtime.movie.poster}}"
+                    class="col-4 object-fit-cover"
+                    style="height: 6.5rem"
+            />
+            <div class="col-8">
+                <div class="fw-bold" th:text="${showtime.movie.movieName}">Từ Vũ Trụ John Wick: Ballerina</div>
+                <div>2D</div>
+                <div class="badge text-bg-warning">P</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-4 text-secondary">Ngày chiếu:</div>
+            <div class="col-8" th:text="${#temporals.format(showtime.startingTime, 'dd/MM/yyyy')}">27/6/2025</div>
+        </div>
+        <div class="row">
+            <div class="col-4 text-secondary">Giờ chiếu:</div>
+            <div class="col-8" th:text="${#temporals.format(showtime.startingTime, 'HH:mm')}">17:50</div>
+        </div>
+        <div class="row">
+            <div class="col-4 text-secondary">Rạp chiếu:</div>
+            <div class="col-8" th:text="${showtime.room.cinema.cinemaName}">Vincom Xuân Khánh Phòng 04</div>
+        </div>
+        <div class="row">
+            <div class="col-4 text-secondary">Phòng chiếu:</div>
+            <div class="col-8" th:text="${showtime.room.roomName}">Vincom Xuân Khánh Phòng 04</div>
+        </div>
+        <div class="row">
+            <div class="col-4 text-secondary">Ghế:</div>
+            <div class="col-8">F6, F7, F8</div>
+        </div>
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-8 text-warning fw-bold text-end">240.000 đ</div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-12 text-primary montserrat-bold">Bắp nước</div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <div class="">Standard Combo</div>
+            <div class="">99.000 đ</div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <div class="">Premium Combo x2</div>
+            <div class="">298.000 đ</div>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-between">
+            <div class="text-primary montserrat-bold">Tổng tiền</div>
+            <div class="fw-bold text-warning">637.000 đ</div>
+        </div>
+        <div class="d-flex justify-content-between mt-3">
+            <div class="btn btn-secondary">Trở lại</div>
+            <div class="btn btn-warning">Tiếp tục</div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

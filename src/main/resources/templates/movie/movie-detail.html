@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+
+<div class="container bg-secondary-subtle p-4">
+    <div class="row gx-5">
+        <div class="col-9">
+            <div class="row mb-3">
+                <div class="col-4">
+                    <img
+                            th:src="@{${movie.poster}}"
+                            alt=""
+                            class="w-100"
+                    />
+                </div>
+                <div class="col-8">
+                    <iframe
+                            class="w-100 h-100"
+                            th:src="@{'https://www.youtube.com/embed/' + ${movie.trailer}}"
+
+                            title="YouTube video player"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen
+                    ></iframe>
+                </div>
+            </div>
+
+            <h3 class="montserrat-bold">
+                <span th:text="${movie.movieName}">Từ Vũ Trụ John Wick: Ballerina</span>
+                <span class="badge text-bg-warning">P</span>
+            </h3>
+            <div class="d-flex">
+                <div>
+                    <i class="bi bi-clock text-warning"></i>&nbsp; <span th:text="${movie.length}"></span> phút
+                </div>
+                <div class="ms-4">
+                    <i class="bi bi-calendar text-warning"></i>&nbsp; <span th:text="${movie.showDate}"></span>
+                </div>
+            </div>
+            <div><strong>Quốc gia:</strong> <span th:text="${movie.country}"></span></div>
+<!--            <div><strong>Nhà sản xuất:</strong> <span th:text="${movie.length}"></span></div>-->
+            <div><strong>Thể loại:</strong> Phiêu lưu</div>
+            <div><strong>Đạo diễn:</strong> <span th:text="${movie.director}"></span></div>
+            <div>
+                <strong>Diễn viên:</strong> <span th:text="${movie.actors}"></span>
+            </div>
+            <div class="card w-100 mb-5 mt-3">
+                <div class="card-body">
+                    <h5 class="montserrat-bold">Nội dung phim</h5>
+
+                    <div th:text="${movie.description}"></div>
+
+                </div>
+            </div>
+
+            <h3 class="montserrat-bold mb-3">
+                Chọn suất chiếu
+            </h3>
+
+            <div class="d-flex column-gap-2 mb-3">
+                <div
+                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
+                        style="width: 4rem"
+                >
+                    <div class="montserrat-bold">T7</div>
+                    <div>14/06</div>
+                </div>
+                <div
+                        class=" rounded p-2 d-flex flex-column align-items-center bg-light text-dark"
+                        style="width: 4rem"
+                >
+                    <div class="montserrat-bold">CN</div>
+                    <div>15/06</div>
+                </div>
+                <div
+                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
+                        style="width: 4rem"
+                >
+                    <div class="montserrat-bold">T2</div>
+                    <div>16/06</div>
+                </div>
+                <div
+                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
+                        style="width: 4rem"
+                >
+                    <div class="montserrat-bold">T3</div>
+                    <div>17/06</div>
+                </div>
+                <div
+                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
+                        style="width: 4rem"
+                >
+                    <div class="montserrat-bold">T4</div>
+                    <div>18/06</div>
+                </div>
+                <div
+                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
+                        style="width: 4rem"
+                >
+                    <div class="montserrat-bold">T5</div>
+                    <div>19/06</div>
+                </div>
+                <div
+                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
+                        style="width: 4rem"
+                >
+                    <div class="montserrat-bold">T6</div>
+                    <div>20/06</div>
+                </div>
+                <div
+                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
+                        style="width: 4rem"
+                >
+                    <div class="montserrat-bold">T7</div>
+                    <div>21/06</div>
+                </div>
+                <div
+                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
+                        style="width: 4rem"
+                >
+                    <div class="montserrat-bold">CN</div>
+                    <div>22/06</div>
+                </div>
+            </div>
+
+<!--            <div th:replace="~{fragments/cinema-showtime-card :: cinema-showtime-card}"></div>-->
+
+<!--            <div th:replace="~{fragments/cinema-showtime-card :: cinema-showtime-card}"></div>-->
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Giờ chiếu</th>
+                    <th scope="col">Rạp chiếu</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="showtime: ${showtimes}">
+                    <td th:text="${showtime.showtimeId}">1</td>
+                    <td> <a th:href="@{/cart/{id}/seat(id=${showtime.showtimeId})}">
+                        <span th:text="${showtime.startingTime}"></span>
+                    </a></td>
+                    <td th:text="${showtime.room.roomName} + ' - ' + ${showtime.room.cinema.cinemaName}">Hà Nội</td>
+                </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+
+        <div class="col-3">
+            <h4 class="montserrat-bold mb-3">Tin tức</h4>
+
+        </div>
+    </div>
+
+</div>
+
+</main>
+</body>
+</html>

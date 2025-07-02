@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
+
+<main>
+    <div class="container bg-secondary-subtle p-4">
+        <div class="row">
+            <div th:replace="~{fragments/admin-sidebar :: admin-sidebar}"></div>
+
+            <div class="col-10">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Tên phòng</th>
+                        <th scope="col">Rạp</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="room: ${rooms}">
+                        <td th:text="${room.roomId}">1</td>
+                        <td th:text="${room.roomName}">Hà Nội</td>
+                        <td th:if="${room.cinema != null}" th:text="${room.cinema.cinemaName}">Hà Nội</td>
+                        <td th:if="${room.cinema == null}">Không có</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h2>Thêm phòng</h2>
+                <form th:action="@{/admin/room/addRoom}" method="post" th:object="${newRoom}">
+                    <div class="mb-3">
+                        <label for="roomName" class="form-label">Tên phòng</label>
+                        <input type="text" th:field="*{roomName}" class="form-control" id="roomName" >
+
+                        <label for="cinemaId" class="form-label">Chọn khu vực</label>
+                        <select class="form-select" id="cinemaId" name="cinemaId">
+                            <option th:each="cinema : ${cinemas}" th:if="${cinema.enabled}"
+                                    th:value="${cinema.cinemaId}"
+                                    th:text="${cinema.cinemaName}"></option>
+                        </select>
+
+
+                    </div>
+
+
+
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
+
+<main>
+    <div class="container p-4 bg-secondary-subtle">
+        <div class="row">
+            <div th:replace="~{fragments/admin-sidebar :: admin-sidebar}"></div>
+
+            <div class="col-10">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Tên rạp</th>
+                        <th scope="col">Địa chỉ</th>
+                        <th scope="col">Khu vực</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cinema: ${cinemas}">
+                        <td th:text="${cinema.cinemaId}">1</td>
+                        <td th:text="${cinema.cinemaName}">Hà Nội</td>
+                        <td th:text="${cinema.address}">1</td>
+                        <td th:if="${cinema.region != null}" th:text="${cinema.region.regionName}">Hà Nội</td>
+                        <td th:if="${cinema.region == null}">Không có</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h2>Thêm rạp</h2>
+                <form th:action="@{/admin/cinema/addCinema}" method="post" th:object="${newCinema}">
+                    <div class="mb-3">
+                        <label for="cinemaName" class="form-label">Tên rạp</label>
+                        <input type="text" th:field="*{cinemaName}" class="form-control" id="cinemaName" >
+
+                        <label for="address" class="form-label">Địa chỉ</label>
+                        <input type="text" th:field="*{address}" class="form-control" id="address" >
+
+                        <label for="regionId" class="form-label">Chọn khu vực</label>
+                        <select class="form-select" id="regionId" name="regionId">
+                            <option value="">-- Không chọn khu vực --</option>
+                            <option th:each="region : ${regions}" th:if="${region.enabled}"
+                                    th:value="${region.regionId}"
+                                    th:text="${region.regionName}"></option>
+                        </select>
+
+
+                    </div>
+
+
+
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</body>
+</html>

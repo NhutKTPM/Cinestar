@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
+
+<main>
+    <div class="container bg-secondary-subtle p-4">
+        <div class="row">
+            <div th:replace="~{fragments/admin-sidebar :: admin-sidebar}"></div>
+
+            <div class="col-10">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Tên khu vực</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="region: ${regions}">
+                        <td th:text="${region.regionId}">1</td>
+                        <td th:text="${region.regionName}">Hà Nội</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h2>Thêm khu vực</h2>
+                <form th:action="@{/admin/region/addRegion}" method="post" th:object="${newRegion}">
+                    <div class="mb-3">
+                        <label for="regionName" class="form-label">Tên khu vực</label>
+                        <input type="text" th:field="*{regionName}" class="form-control" id="regionName" >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</body>
+</html>

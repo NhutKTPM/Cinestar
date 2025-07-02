@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
+
+<main>
+    <div class="container bg-secondary-subtle p-4">
+        <div class="row">
+            <div th:replace="~{fragments/admin-sidebar :: admin-sidebar}"></div>
+
+            <div class="col-10">
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <img
+                                th:src="@{${movie.poster}}"
+                                alt=""
+                                class="w-100"
+                        />
+                    </div>
+                    <div class="col-8">
+                        <iframe
+                                class="w-100 h-100"
+                                th:src="@{'https://www.youtube.com/embed/' + ${movie.trailer}}"
+
+                                title="YouTube video player"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen
+                        ></iframe>
+                    </div>
+                </div>
+
+                <h3 class="montserrat-bold">
+                    <span th:text="${movie.movieName}">Từ Vũ Trụ John Wick: Ballerina</span>
+                    <span class="badge text-bg-warning">P</span>
+                </h3>
+                <div class="d-flex">
+                    <div>
+                        <i class="bi bi-clock text-warning"></i>&nbsp; <span th:text="${movie.length}"></span> phút
+                    </div>
+                    <div class="ms-4">
+                        <i class="bi bi-calendar text-warning"></i>&nbsp; <span th:text="${movie.showDate}"></span>
+                    </div>
+                </div>
+                <div><strong>Quốc gia:</strong> <span th:text="${movie.country}"></span></div>
+                <!--            <div><strong>Nhà sản xuất:</strong> <span th:text="${movie.length}"></span></div>-->
+                <div><strong>Thể loại:</strong> Phiêu lưu</div>
+                <div><strong>Đạo diễn:</strong> <span th:text="${movie.director}"></span></div>
+                <div>
+                    <strong>Diễn viên:</strong> <span th:text="${movie.actors}"></span>
+                </div>
+                <div class="card w-100 mb-5 mt-3">
+                    <div class="card-body">
+                        <h5 class="montserrat-bold">Nội dung phim</h5>
+
+                        <div th:text="${movie.description}"></div>
+
+                    </div>
+                </div>
+
+
+
+
+                <h2>Thêm suất chiếu</h2>
+                <form th:action="@{/admin/movie/{id}/addShowtime(id=${movie.movieId})}" method="post" th:object="${newShowtime}">
+                    <div class="mb-3">
+
+                        <label for="startingTime" class="form-label">Giờ chiếu</label>
+                        <input type="datetime-local" th:field="*{startingTime}" class="form-control" id="startingTime" >
+
+                        <label for="roomId" class="form-label">Chọn phòng chiếu</label>
+                        <select class="form-select" id="roomId" name="roomId">
+                            <option value="">-- Không chọn phòng chiếu --</option>
+                            <option th:each="room : ${rooms}" th:if="${room.enabled}"
+                                    th:value="${room.roomId}"
+                                    th:text="${room.roomName} + ' - ' + ${room.cinema.cinemaName}"></option>
+                        </select>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </form>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Giờ chiếu</th>
+                        <th scope="col">Rạp chiếu</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="showtime: ${showtimes}">
+                        <td th:text="${showtime.showtimeId}">1</td>
+                        <td th:text="${showtime.startingTime}">Hà Nội</td>
+                        <td th:text="${showtime.room.roomName} + ' - ' + ${showtime.room.cinema.cinemaName}">Hà Nội</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</body>
+</html>

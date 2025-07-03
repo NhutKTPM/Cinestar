@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+
+
+<div class="container bg-secondary-subtle p-4">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <h1 class="montserrat-bold">Đăng nhập</h1>
+
+            <form th:action="@{/login}" method="post" style="max-width: 400px; margin: 0 auto;">
+                <div class="mb-3">
+
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+
+
+                    <label for="password" class="form-label">Mật khẩu:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+
+
+                </div>
+                <button type="submit" class="btn btn-primary">Đăng nhập</button>
+            </form>
+        </div>
+    </div>
+
+<!--    <div>-->
+<!--        <form th:action="@{/login}" method="post" style="max-width: 400px; margin: 0 auto;">-->
+<!--            <p>-->
+<!--                E-mail: <input type="email" name="email" required />-->
+<!--            </p>-->
+<!--            <p>-->
+<!--                Password: <input type="password" name="password" required />-->
+<!--            </p>-->
+<!--            <p>-->
+<!--                <input type="submit" value="Login" />-->
+<!--            </p>-->
+<!--        </form>-->
+
+<!--        <h3><a th:href="@{/register}">Register</a></h3>-->
+
+<!--    </div>-->
+
+
+</div>
+
+</main>
+</body>
+</html>

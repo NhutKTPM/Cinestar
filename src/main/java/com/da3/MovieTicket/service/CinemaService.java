@@ -21,8 +21,8 @@ public class CinemaService {
         return cinemaRepository.findAll();
     }
 
-    public void createCinema(CinemaEntity region){
-        cinemaRepository.save(region);
+    public void createCinema(CinemaEntity cinema){
+        cinemaRepository.save(cinema);
     }
 
     public CinemaEntity getCinemaById(Long id) {

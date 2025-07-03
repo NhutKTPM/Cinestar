@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+
+
+<div class="container bg-secondary-subtle p-4">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <h1 class="montserrat-bold">Đăng ký</h1>
+
+            <form th:action="@{/process_register}" th:object="${user}"
+                  method="post">
+                <div class="mb-3">
+
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" th:field="*{email}" class="form-control" id="email" >
+
+
+                    <label for="password" class="form-label">Mật khẩu:</label>
+                    <input type="password" th:field="*{password}" class="form-control" id="password" >
+
+
+                    <label for="lastName" class="form-label">Họ:</label>
+                    <input type="text" th:field="*{lastName}" class="form-control" id="lastName" >
+
+                    <label for="firstName" class="form-label">Tên:</label>
+                    <input type="text" th:field="*{firstName}" class="form-control" id="firstName" >
+
+
+
+
+
+                </div>
+                <button type="submit" class="btn btn-primary">Đăng ký</button>
+            </form>
+
+        </div>
+        <div class="col-4"></div>
+    </div>
+
+
+
+</div>
+
+</main>
+</body>
+</html>

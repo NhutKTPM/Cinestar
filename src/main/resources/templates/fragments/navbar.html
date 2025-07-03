@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
 </head>
@@ -55,15 +55,61 @@
                     <i class="bi bi-list-task"></i> Tin tức</a
                 >
             </li>
-            <li class="nav-item">
+            <li class="nav-item" sec:authorize="isAnonymous()">
                 <a
                         class="nav-link active fw-bold d-flex flex-column align-items-center montserrat-bold"
-                        href="/"
+                        th:href="@{/register}"
+                >
+                    <i class="bi bi-person-circle"></i> Đăng ký</a
+                >
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+                <a
+                        class="nav-link active fw-bold d-flex flex-column align-items-center montserrat-bold"
+                        th:href="@{/login}"
                 >
                     <i class="bi bi-person-circle"></i> Đăng nhập</a
                 >
             </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a
+                        class="nav-link active fw-bold d-flex flex-column align-items-center montserrat-bold"
+                        th:href="@{/login}"
+                >
+                    <i class="bi bi-person-circle"></i> <span sec:authentication="principal.fullName"></span> </a
+                >
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+<!--                <a-->
+<!--                        class="nav-link active fw-bold d-flex flex-column align-items-center montserrat-bold"-->
+<!--                        th:href="@{/logout}"-->
+<!--                >-->
+<!--                    <i class="bi bi-person-circle"></i> Đăng xuất </a-->
+<!--                >-->
+
+                            <form th:action="@{/logout}" method="post">
+
+                                <input type="submit" value="Sign Out" />
+                            </form>
+
+            </li>
         </ul>
+
+
+<!--        <div sec:authorize="isAnonymous()">-->
+<!--            <h3><a th:href="@{/register}">Register</a></h3>-->
+<!--            <h3><a th:href="@{/login}">Login</a></h3>-->
+<!--        </div>-->
+<!--        <div sec:authorize="isAuthenticated()">-->
+<!--            <form th:action="@{/logout}" method="post">-->
+<!--                <p>-->
+<!--                    Welcome <b><span sec:authentication="principal.fullName"></span></b>-->
+<!--                <div th:text="${#authentication.getPrincipal().getId()}"></div>-->
+
+<!--                </p>-->
+<!--                <input type="submit" value="Sign Out" />-->
+<!--            </form>-->
+<!--        </div>-->
 
 
     </div>

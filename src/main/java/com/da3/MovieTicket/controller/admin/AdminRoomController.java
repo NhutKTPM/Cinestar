@@ -6,6 +6,7 @@ import com.da3.MovieTicket.entity.RoomEntity;
 import com.da3.MovieTicket.service.CinemaService;
 import com.da3.MovieTicket.service.RegionService;
 import com.da3.MovieTicket.service.RoomService;
+import com.da3.MovieTicket.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,14 +20,14 @@ import java.util.List;
 public class AdminRoomController {
 
     private final CinemaService cinemaService;
-    private final RegionService regionService;
+    private final SeatService seatService;
     private final RoomService roomService;
 
     @Autowired
-    public AdminRoomController(CinemaService cinemaService, RegionService regionService, RoomService roomService){
+    public AdminRoomController(CinemaService cinemaService, SeatService seatService, RoomService roomService){
 
         this.cinemaService = cinemaService;
-        this.regionService = regionService;
+        this.seatService = seatService;
         this.roomService = roomService;
     }
 
@@ -49,7 +50,9 @@ public class AdminRoomController {
             newRoom.setCinema(cinemaService.getCinemaById(cinemaId));
         }
 
-        roomService.createRoom(newRoom);
+        RoomEntity room = roomService.createRoom(newRoom);
+
+        seatService.initializeRoomSeats(room.getRoomId(), 10, 15 );
         return "redirect:/admin/room";
     }
 }

@@ -25,8 +25,8 @@ public class RoomService {
         return roomRepository.findAll();
     }
 
-    public void createRoom(RoomEntity room){
-        roomRepository.save(room);
+    public RoomEntity createRoom(RoomEntity room){
+        return roomRepository.save(room);
     }
 
     public RoomEntity getRoomById(Long id) {

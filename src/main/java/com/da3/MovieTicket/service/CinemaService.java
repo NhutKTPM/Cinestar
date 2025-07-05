@@ -29,4 +29,8 @@ public class CinemaService {
         return cinemaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid cinema Id: " + id));
     }
+    
+    public List<CinemaEntity> getCinemasByRegion(RegionEntity region){
+        return cinemaRepository.findByRegion(region);
+    }
 }

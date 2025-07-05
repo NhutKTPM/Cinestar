@@ -5,6 +5,9 @@ import com.da3.MovieTicket.entity.RegionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CinemaRepository extends JpaRepository<CinemaEntity, Long> {
+    List<CinemaEntity> findByRegion(RegionEntity region);
 }

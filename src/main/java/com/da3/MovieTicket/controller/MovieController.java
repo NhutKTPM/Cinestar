@@ -1,6 +1,7 @@
 package com.da3.MovieTicket.controller;
 
 import com.da3.MovieTicket.entity.MovieEntity;
+import com.da3.MovieTicket.entity.RegionEntity;
 import com.da3.MovieTicket.entity.ShowtimeEntity;
 import com.da3.MovieTicket.service.MovieService;
 import com.da3.MovieTicket.service.ShowtimeService;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import com.da3.MovieTicket.service.RegionService;
 
 import java.util.List;
 
@@ -16,11 +18,14 @@ import java.util.List;
 public class MovieController {
     private final MovieService movieService;
     private final ShowtimeService showtimeService;
+    private final RegionService regionService;
+
 
     @Autowired
-    public MovieController(MovieService movieService, ShowtimeService showtimeService){
+    public MovieController(MovieService movieService, ShowtimeService showtimeService, RegionService regionService) {
         this.movieService = movieService;
-        this. showtimeService = showtimeService;
+        this.showtimeService = showtimeService;
+        this.regionService = regionService;
     }
 
     @GetMapping("/movie/{id}")
@@ -35,6 +40,9 @@ public class MovieController {
 
         List<ShowtimeEntity> showtimes = showtimeService.getShowtimeOfMovie(movie);
         model.addAttribute("showtimes", showtimes);
+
+        List<RegionEntity> regions = regionService.getAllRegions();
+        model.addAttribute("regions", regions);
 
 
         return "movie/movie-detail";

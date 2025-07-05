@@ -7,7 +7,10 @@ import com.da3.MovieTicket.repository.ShowtimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ShowtimeService {
@@ -35,5 +38,18 @@ public class ShowtimeService {
         ;
 
         return showtimeRepository.findByMovie(movie);
+    }
+
+
+    public List<LocalDate> getDistinctShowDatesForMovie(MovieEntity movie) {
+        return showtimeRepository.findDistinctShowDatesByMovie(movie);
+    }
+
+    public Map<String, List<ShowtimeEntity>> getShowtimesByDateGroupedByCinema(LocalDate date) {
+        List<ShowtimeEntity> showtimes = showtimeRepository.findByShowDate(date);
+        return showtimes.stream()
+                .collect(Collectors.groupingBy(
+                        showtime -> showtime.getRoom().getCinema().getCinemaName()
+                ));
     }
 }

@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/common :: common-head"></head>
+
+<style>
+    .show-date:hover {
+        background-color: rgba(255, 193, 7, 0.5);
+    }
+    .show-date.selected {
+        background-color: #ffc107;
+    }
+</style>
+
 <body class="container">
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
@@ -81,68 +91,21 @@
 
 
             <div class="d-flex column-gap-2 mb-3">
-                <div
-                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
-                        style="width: 4rem"
-                >
-                    <div class="montserrat-bold">T7</div>
-                    <div>14/06</div>
+                <div th:each="showDate : ${showDates}"
+                     th:data-date="${#temporals.format(showDate, 'yyyy-MM-dd')}"
+                     class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center show-date"
+                     style="width: 4rem; cursor: pointer;">
+                    <div class="montserrat-bold" th:text="${#temporals.format(showDate, 'E')}">T7</div>
+                    <div th:text="${#temporals.format(showDate, 'dd/MM')}">14/06</div>
                 </div>
-                <div
-                        class=" rounded p-2 d-flex flex-column align-items-center bg-light text-dark"
-                        style="width: 4rem"
-                >
-                    <div class="montserrat-bold">CN</div>
-                    <div>15/06</div>
-                </div>
-                <div
-                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
-                        style="width: 4rem"
-                >
-                    <div class="montserrat-bold">T2</div>
-                    <div>16/06</div>
-                </div>
-                <div
-                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
-                        style="width: 4rem"
-                >
-                    <div class="montserrat-bold">T3</div>
-                    <div>17/06</div>
-                </div>
-                <div
-                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
-                        style="width: 4rem"
-                >
-                    <div class="montserrat-bold">T4</div>
-                    <div>18/06</div>
-                </div>
-                <div
-                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
-                        style="width: 4rem"
-                >
-                    <div class="montserrat-bold">T5</div>
-                    <div>19/06</div>
-                </div>
-                <div
-                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
-                        style="width: 4rem"
-                >
-                    <div class="montserrat-bold">T6</div>
-                    <div>20/06</div>
-                </div>
-                <div
-                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
-                        style="width: 4rem"
-                >
-                    <div class="montserrat-bold">T7</div>
-                    <div>21/06</div>
-                </div>
-                <div
-                        class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center"
-                        style="width: 4rem"
-                >
-                    <div class="montserrat-bold">CN</div>
-                    <div>22/06</div>
+            </div>
+
+<!--            Showtimes by cinemas -->
+            <div id="showtimesContainer" th:each="cinema : ${showtimeMap}">
+                <h3 th:text="${cinema.key}">Cinema Name</h3>
+                <div th:each="showtime : ${cinema.value}">
+                    <span th:text="${#temporals.format(showtime.startingTime, 'HH:mm')}">10:00</span>
+                    <span th:text="${showtime.room.roomName}">Room 1</span>
                 </div>
             </div>
 
@@ -150,24 +113,24 @@
 
             <div th:replace="~{fragments/cinema-showtime-card :: cinema-showtime-card}"></div>
 
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Giờ chiếu</th>
-                    <th scope="col">Rạp chiếu</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="showtime: ${showtimes}">
-                    <td th:text="${showtime.showtimeId}">1</td>
-                    <td> <a th:href="@{/cart/{id}/seat(id=${showtime.showtimeId})}">
-                        <span th:text="${showtime.startingTime}"></span>
-                    </a></td>
-                    <td th:text="${showtime.room.roomName} + ' - ' + ${showtime.room.cinema.cinemaName}">Hà Nội</td>
-                </tr>
-                </tbody>
-            </table>
+<!--            <table class="table">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th scope="col">Id</th>-->
+<!--                    <th scope="col">Giờ chiếu</th>-->
+<!--                    <th scope="col">Rạp chiếu</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr th:each="showtime: ${showtimes}">-->
+<!--                    <td th:text="${showtime.showtimeId}">1</td>-->
+<!--                    <td> <a th:href="@{/cart/{id}/seat(id=${showtime.showtimeId})}">-->
+<!--                        <span th:text="${showtime.startingTime}"></span>-->
+<!--                    </a></td>-->
+<!--                    <td th:text="${showtime.room.roomName} + ' - ' + ${showtime.room.cinema.cinemaName}">Hà Nội</td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
 
 
         </div>
@@ -182,9 +145,8 @@
 
 </main>
 
-<script>
-    document.getElementById('regionSelect').addEventListener('change', function() {
-        const regionId = this.value;
+<script th:inline="javascript">
+    function loadCinemas(regionId) {
         const cinemaSelect = document.getElementById('cinemaSelect');
 
         // Clear existing options except the first one
@@ -192,19 +154,93 @@
             cinemaSelect.remove(1);
         }
 
-        if (regionId) {
-            // Fetch cinemas for selected region
-            fetch(`/api/cinemas/region/${regionId}`)
-                .then(response => response.json())
-                .then(cinemas => {
-                    cinemas.forEach(cinema => {
-                        const option = new Option(cinema.cinemaName, cinema.cinemaId);
-                        cinemaSelect.add(option);
-                    });
-                })
-                .catch(error => console.error('Error:', error));
-        }
+        // If no region selected (Toàn quốc), fetch all cinemas
+        const apiUrl = regionId ? `/api/cinemas/region/${regionId}` : '/api/cinemas';
+        
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(cinemas => {
+                cinemas.forEach(cinema => {
+                    const option = new Option(cinema.cinemaName, cinema.cinemaId);
+                    cinemaSelect.add(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Load all cinemas when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        loadCinemas(''); // Load all cinemas initially
     });
+
+    // Handle region selection changes
+    document.getElementById('regionSelect').addEventListener('change', function() {
+        loadCinemas(this.value);
+        filterShowtimes();
+    });
+
+
+
+
+        // Add click handlers for date selection
+    document.addEventListener('DOMContentLoaded', function() {
+        const dates = document.querySelectorAll('.show-date');
+
+        // Select first date by default
+        if (dates.length > 0) {
+            dates[0].classList.add('selected');
+            dates[0].style.backgroundColor = '#ffc107';
+        }
+
+        dates.forEach(date => {
+            date.addEventListener('click', function() {
+                // Remove selection from all dates
+                dates.forEach(d => {
+                    d.classList.remove('selected');
+                    d.style.backgroundColor = '';
+                });
+
+                // Add selection to clicked date
+                this.classList.add('selected');
+                this.style.backgroundColor = '#ffc107';
+
+                filterShowtimes();
+            });
+        });
+
+        // Add change handler for cinema select
+        // document.getElementById('cinemaSelect').addEventListener('change', filterShowtimes);
+
+        // Initial filter
+        // filterShowtimes();
+    });
+    
+    
+    
+    function filterShowtimes() {
+         const regionId = document.getElementById('regionSelect').value;
+         const cinemaId = document.getElementById('cinemaSelect').value;
+         const date = document.querySelector('.show-date.selected').dataset.date;
+        
+         console.log('Selected Region ID:', regionId);
+         console.log('Selected Cinema ID:', cinemaId); 
+         console.log('Selected Date:', date);
+        
+         // Make API call to get showtimes
+        fetch(`/api/showtimes?date=${date}`)
+            .then(response => response.json())
+            .then(showtimeMap => {
+                console.log(showtimeMap);
+
+            })
+            .catch(error => console.error('Error fetching showtimes:', error));
+
+
+
+    }
+
+    // document.getElementById('regionSelect').addEventListener('change', filterShowtimes);
+    document.getElementById('cinemaSelect').addEventListener('change', filterShowtimes);
 </script>
 
 </body>

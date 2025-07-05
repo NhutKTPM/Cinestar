@@ -23,6 +23,11 @@ public class CinemaApiController {
         this.regionService = regionService;
     }
 
+    @GetMapping("/cinemas")
+    public List<CinemaEntity> getAllCinemas() {
+        return cinemaService.getAllCinemas();
+    }
+
     @GetMapping("/cinemas/region/{regionId}")
     public List<CinemaEntity> getCinemasByRegion(@PathVariable Long regionId) {
         RegionEntity region = regionService.getRegionById(regionId);

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.da3.MovieTicket.service.RegionService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -40,6 +41,9 @@ public class MovieController {
 
         List<ShowtimeEntity> showtimes = showtimeService.getShowtimeOfMovie(movie);
         model.addAttribute("showtimes", showtimes);
+
+        List<LocalDate> showDates = showtimeService.getDistinctShowDatesForMovie(movie);
+        model.addAttribute("showDates", showDates);
 
         List<RegionEntity> regions = regionService.getAllRegions();
         model.addAttribute("regions", regions);

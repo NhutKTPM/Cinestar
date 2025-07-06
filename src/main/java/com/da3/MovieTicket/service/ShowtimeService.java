@@ -1,5 +1,6 @@
 package com.da3.MovieTicket.service;
 
+import com.da3.MovieTicket.entity.CinemaEntity;
 import com.da3.MovieTicket.entity.MovieEntity;
 import com.da3.MovieTicket.entity.ShowtimeEntity;
 import com.da3.MovieTicket.repository.ShowtimeRepository;
@@ -45,8 +46,11 @@ public class ShowtimeService {
         return showtimeRepository.findDistinctShowDatesByMovie(movie);
     }
 
-    public Map<String, List<ShowtimeEntity>> getShowtimesByDateGroupedByCinema(LocalDate date) {
-        List<ShowtimeEntity> showtimes = showtimeRepository.findByShowDate(date);
+    public Map<String, List<ShowtimeEntity>> getShowtimesGroupedByCinema(LocalDate date, CinemaEntity cinema) {
+        List<ShowtimeEntity> showtimes;
+        if (cinema != null) {showtimes = showtimeRepository.findByShowDateAndCinema(date, cinema);}
+        else {showtimes = showtimeRepository.findByShowDate(date);}
+
         return showtimes.stream()
                 .collect(Collectors.groupingBy(
                         showtime -> showtime.getRoom().getCinema().getCinemaName()

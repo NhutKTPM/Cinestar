@@ -1,5 +1,6 @@
 package com.da3.MovieTicket.repository;
 
+import com.da3.MovieTicket.entity.CinemaEntity;
 import com.da3.MovieTicket.entity.MovieEntity;
 import com.da3.MovieTicket.entity.ShowtimeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,4 +24,6 @@ public interface ShowtimeRepository extends JpaRepository<ShowtimeEntity, Long> 
     @Query("SELECT s FROM ShowtimeEntity s WHERE DATE(s.startingTime) = :date")
     List<ShowtimeEntity> findByShowDate(@Param("date") LocalDate date);
 
+    @Query("SELECT s FROM ShowtimeEntity s WHERE DATE(s.startingTime) = :date AND s.room.cinema = :cinema")
+            List<ShowtimeEntity> findByShowDateAndCinema(@Param("date") LocalDate date, @Param("cinema") CinemaEntity cinema);
 }

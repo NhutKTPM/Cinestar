@@ -101,36 +101,14 @@
             </div>
 
 <!--            Showtimes by cinemas -->
-            <div id="showtimesContainer" th:each="cinema : ${showtimeMap}">
-                <h3 th:text="${cinema.key}">Cinema Name</h3>
-                <div th:each="showtime : ${cinema.value}">
-                    <span th:text="${#temporals.format(showtime.startingTime, 'HH:mm')}">10:00</span>
-                    <span th:text="${showtime.room.roomName}">Room 1</span>
-                </div>
+            <div id="showtimesContainer">
+
             </div>
 
-            <div th:replace="~{fragments/cinema-showtime-card :: cinema-showtime-card}"></div>
+<!--            <div th:replace="~{fragments/cinema-showtime-card :: cinema-showtime-card}"></div>-->
 
-            <div th:replace="~{fragments/cinema-showtime-card :: cinema-showtime-card}"></div>
 
-<!--            <table class="table">-->
-<!--                <thead>-->
-<!--                <tr>-->
-<!--                    <th scope="col">Id</th>-->
-<!--                    <th scope="col">Giờ chiếu</th>-->
-<!--                    <th scope="col">Rạp chiếu</th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--                <tbody>-->
-<!--                <tr th:each="showtime: ${showtimes}">-->
-<!--                    <td th:text="${showtime.showtimeId}">1</td>-->
-<!--                    <td> <a th:href="@{/cart/{id}/seat(id=${showtime.showtimeId})}">-->
-<!--                        <span th:text="${showtime.startingTime}"></span>-->
-<!--                    </a></td>-->
-<!--                    <td th:text="${showtime.room.roomName} + ' - ' + ${showtime.room.cinema.cinemaName}">Hà Nội</td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
+
 
 
         </div>
@@ -218,26 +196,53 @@
     
     
     function filterShowtimes() {
-         const regionId = document.getElementById('regionSelect').value;
-         const cinemaId = document.getElementById('cinemaSelect').value;
-         const date = document.querySelector('.show-date.selected').dataset.date;
-        
-         console.log('Selected Region ID:', regionId);
-         console.log('Selected Cinema ID:', cinemaId); 
-         console.log('Selected Date:', date);
-        
-         // Make API call to get showtimes
-        fetch(`/api/showtimes?date=${date}`)
-            .then(response => response.json())
-            .then(showtimeMap => {
-                console.log(showtimeMap);
-
-            })
-            .catch(error => console.error('Error fetching showtimes:', error));
-
-
-
-    }
+    const regionId = document.getElementById('regionSelect').value;
+    const cinemaId = document.getElementById('cinemaSelect').value;
+    const date = document.querySelector('.show-date.selected').dataset.date;
+    
+    console.log('Selected Region ID:', regionId);
+    console.log('Selected Cinema ID:', cinemaId); 
+    console.log('Selected Date:', date);
+    
+    // Make API call to get showtimes
+    fetch(`/api/showtimes?date=${date}`)
+        .then(response => response.json())
+        .then(showtimeMap => {
+            console.log(showtimeMap);
+            
+            // Get the container where we'll put all cinema cards
+            const showtimesContainer = document.getElementById('showtimesContainer');
+            showtimesContainer.innerHTML = ''; // Clear existing content
+            
+            // For each cinema and its showtimes in the map
+            Object.entries(showtimeMap).forEach(([cinemaName, showtimes]) => {
+                // Only show cinemas that match the selected cinema filter, or all if no cinema is selected
+                if (!cinemaId || cinemaName.includes(cinemaId)) {
+                    const cinemaCard = document.createElement('div');
+                    cinemaCard.className = 'card w-100 mb-3';
+                    cinemaCard.innerHTML = `
+                        <div class="card-body">
+                            <h5 class="montserrat-bold">
+                                ${cinemaName} &nbsp;<i class="bi bi-heart"></i>
+                            </h5>
+                            <div class="d-flex column-gap-2 mb-2">
+                                ${showtimes.map(showtime => `
+                                    <button class="btn btn-warning fw-bold" style="width: 5rem">
+                                        ${new Date(showtime.startingTime).toLocaleTimeString('vi-VN', {
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        })}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    showtimesContainer.appendChild(cinemaCard);
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching showtimes:', error));
+}
 
     // document.getElementById('regionSelect').addEventListener('change', filterShowtimes);
     document.getElementById('cinemaSelect').addEventListener('change', filterShowtimes);

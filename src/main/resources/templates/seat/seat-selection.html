@@ -27,7 +27,12 @@
                         <div th:each="row : ${seatLayout}" class="row column-gap-1 mb-1">
                             <span style="width: 1.5rem; height: 1.5rem" th:text="${row[0].rowLabel}"></span>
                             <button th:each="seat : ${row}"
-                                    class="border border-2 rounded p-0 border-warning" style="width: 1.5rem; height: 1.5rem"
+                                    th:class="${'border border-2 rounded p-0 ' +
+                (seat.seatType.seatTypeId == 2 ? 'border-warning' :
+                (seat.seatType.seatTypeId == 3 ? 'border-danger' :
+                (seat.seatType.seatTypeId == 4 ? 'border-success' : 'border-primary')))}"
+
+                                    style="width: 1.5rem; height: 1.5rem"
                                     th:data-seat-id="${seat.seatId}"
                                     th:text="${seat.seatNumber}">
                             </button>
@@ -39,16 +44,31 @@
             </div>
 
             <div class="d-flex justify-content-evenly mt-5">
-                <div class="border border-2 rounded p-0 border-primary" style="width: 1.5rem; height: 1.5rem"></div>
-                <div>Ghế thường</div>
+                <div class="d-flex">
+                    <div class="border border-2 rounded p-0 border-primary" style="width: 1.5rem; height: 1.5rem"></div>
+                    <div>&nbsp;&nbsp;Ghế thường</div>
+                </div>
+
+                <div class="d-flex">
                 <div class="border border-2 rounded p-0 border-warning" style="width: 1.5rem; height: 1.5rem"></div>
-                <div>Ghế VIP</div>
-                <div class="border border-2 rounded p-0 border-danger" style="width: 1.5rem; height: 1.5rem"></div>
-                <div>Sweetbox</div>
-                <div class="border border-2 rounded p-0 border-light bg-light" style="width: 1.5rem; height: 1.5rem"></div>
-                <div>Đã chọn</div>
+                <div>&nbsp;&nbsp;Ghế VIP</div>
+                </div>
+                <div class="d-flex">
+                    <div class="border border-2 rounded p-0 border-danger" style="width: 1.5rem; height: 1.5rem"></div>
+                    <div>&nbsp;&nbsp;3D</div>
+                </div>
+                <div class="d-flex">
+                    <div class="border border-2 rounded p-0 border-success" style="width: 1.5rem; height: 1.5rem"></div>
+                    <div>&nbsp;&nbsp;IMAX</div>
+                </div>
+                <div class="d-flex">
+                    <div class="border border-2 rounded p-0 border-light bg-light" style="width: 1.5rem; height: 1.5rem"></div>
+                    <div>&nbsp;&nbsp;Đã chọn</div>
+                </div>
+                <div class="d-flex">
                 <div class="border border-2 rounded p-0 border-secondary-subtle" style="width: 1.5rem; height: 1.5rem; background-color: #41464b;"></div>
-                <div>Không thể chọn</div>
+                <div>&nbsp;&nbsp;Không thể chọn</div>
+                </div>
 
 
             </div>

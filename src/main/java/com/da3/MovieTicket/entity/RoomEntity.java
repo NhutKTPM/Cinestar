@@ -32,4 +32,10 @@ public class RoomEntity {
     @ManyToOne
     @JoinColumn(name = "cinemaId", nullable = false)
     private CinemaEntity cinema;
+
+    @ManyToOne
+    @JoinColumn(name = "roomTypeId", columnDefinition = "bigint default 1")
+    private RoomTypeEntity roomType;
+
+//        @JoinColumn(name = "regionTypeId", columnDefinition = "bigint default 1")
 }

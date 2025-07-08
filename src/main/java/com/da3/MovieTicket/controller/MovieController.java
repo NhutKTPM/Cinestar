@@ -42,7 +42,8 @@ public class MovieController {
     @GetMapping("/movie/{id}")
     public String showMovieDetail(@PathVariable("id") long id, Model model,
                                   @RequestParam(value = "date", required = false) LocalDate date,
-                                  @RequestParam(value = "cinemaId", required = false) Long cinemaId) {
+                                  @RequestParam(value = "cinemaId", required = false) Long cinemaId,
+                                  @RequestParam(value = "regionId", required = false) Long regionId) {
         MovieEntity movie = movieService.getMovieById(id);
 
         if (movie == null) {
@@ -60,8 +61,10 @@ public class MovieController {
         if (date == null) { date = showDates.getFirst();}
 
         CinemaEntity cinema = null;
+        RegionEntity region = null;
         if (cinemaId != null) { cinema = cinemaService.getCinemaById(cinemaId);}
-        Map<String, List<ShowtimeEntity>> showtimesByCinema = showtimeService.getShowtimesGroupedByCinema(date, cinema);
+        if (regionId != null) { region = regionService.getRegionById(regionId);}
+        Map<String, List<ShowtimeEntity>> showtimesByCinema = showtimeService.getShowtimesGroupedByCinema(date, cinema, region);
         model.addAttribute("showtimesByCinema", showtimesByCinema);
 
 

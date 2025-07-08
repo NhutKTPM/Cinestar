@@ -54,7 +54,6 @@
                 </div>
             </div>
             <div><strong>Quốc gia:</strong> <span th:text="${movie.country}"></span></div>
-<!--            <div><strong>Nhà sản xuất:</strong> <span th:text="${movie.length}"></span></div>-->
             <div><strong>Thể loại:</strong> Phiêu lưu</div>
             <div><strong>Đạo diễn:</strong> <span th:text="${movie.director}"></span></div>
             <div>
@@ -70,10 +69,10 @@
             </div>
 
             <h3 class="montserrat-bold mb-3">
-                Chọn suất chiếu
+            Chọn suất chiếu
             </h3>
 
-            <div class="row">
+            <div class="row" id="showtimes-section">
                 <div class="col-4 mb-3">
                     <select id="regionSelect" class="form-select" aria-label="Region select">
                         <option selected value="">Toàn quốc</option>
@@ -100,12 +99,11 @@
                 </div>
             </div>
 
-<!--            Showtimes by cinemas -->
-            <div id="showtimesContainer">
+            <!-- Showtimes by cinemas -->
 
+            <div th:each="cinema : ${showtimesByCinema}">
+                <div th:replace="~{fragments/cinema-showtime-card :: cinema-showtime-card(${cinema})}"></div>
             </div>
-
-<!--            <div th:replace="~{fragments/cinema-showtime-card :: cinema-showtime-card}"></div>-->
 
 
 
@@ -126,6 +124,8 @@
 <script th:inline="javascript">
     function loadCinemas(regionId) {
         const cinemaSelect = document.getElementById('cinemaSelect');
+        const urlParams = new URLSearchParams(window.location.search);
+        const cinemaIdParam = urlParams.get('cinemaId');
 
         // Clear existing options except the first one
         while (cinemaSelect.options.length > 1) {
@@ -134,12 +134,15 @@
 
         // If no region selected (Toàn quốc), fetch all cinemas
         const apiUrl = regionId ? `/api/cinemas/region/${regionId}` : '/api/cinemas';
-        
+
         fetch(apiUrl)
             .then(response => response.json())
             .then(cinemas => {
                 cinemas.forEach(cinema => {
                     const option = new Option(cinema.cinemaName, cinema.cinemaId);
+                    if (cinemaIdParam && cinema.cinemaId == cinemaIdParam) {
+                        option.selected = true;
+                    }
                     cinemaSelect.add(option);
                 });
             })
@@ -148,7 +151,15 @@
 
     // Load all cinemas when page loads
     document.addEventListener('DOMContentLoaded', function() {
-        loadCinemas(''); // Load all cinemas initially
+        const urlParams = new URLSearchParams(window.location.search);
+        const regionIdParam = urlParams.get('regionId');
+
+        if (regionIdParam) {
+            document.getElementById('regionSelect').value = regionIdParam;
+            loadCinemas(regionIdParam);
+        } else {
+            loadCinemas(''); // Load all cinemas initially
+        }
     });
 
     // Handle region selection changes
@@ -164,8 +175,20 @@
     document.addEventListener('DOMContentLoaded', function() {
         const dates = document.querySelectorAll('.show-date');
 
-        // Select first date by default
-        if (dates.length > 0) {
+        // Get date from URL if it exists
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+
+        if (dateParam) {
+            // If date parameter exists in URL, select that date
+            dates.forEach(date => {
+                if (date.dataset.date === dateParam) {
+                    date.classList.add('selected');
+                    date.style.backgroundColor = '#ffc107';
+                }
+            });
+        } else if (dates.length > 0) {
+            // If no date parameter, select first date
             dates[0].classList.add('selected');
             dates[0].style.backgroundColor = '#ffc107';
         }
@@ -186,63 +209,41 @@
             });
         });
 
-        // Add change handler for cinema select
-        // document.getElementById('cinemaSelect').addEventListener('change', filterShowtimes);
 
-        // Initial filter
-        // filterShowtimes();
+        // Scroll to showtimes section if date parameter exists
+        if (urlParams.has('date')) {
+            document.getElementById('showtimes-section').scrollIntoView({behavior: 'smooth', block: "start"});
+        }
     });
+
     
     
     
     function filterShowtimes() {
-    const regionId = document.getElementById('regionSelect').value;
-    const cinemaId = document.getElementById('cinemaSelect').value;
-    const date = document.querySelector('.show-date.selected').dataset.date;
-    
-    console.log('Selected Region ID:', regionId);
-    console.log('Selected Cinema ID:', cinemaId); 
-    console.log('Selected Date:', date);
-    
-    // Make API call to get showtimes
-    fetch(`/api/showtimes?date=${date}`)
-        .then(response => response.json())
-        .then(showtimeMap => {
-            console.log(showtimeMap);
-            
-            // Get the container where we'll put all cinema cards
-            const showtimesContainer = document.getElementById('showtimesContainer');
-            showtimesContainer.innerHTML = ''; // Clear existing content
-            
-            // For each cinema and its showtimes in the map
-            Object.entries(showtimeMap).forEach(([cinemaName, showtimes]) => {
-                // Only show cinemas that match the selected cinema filter, or all if no cinema is selected
-                if (!cinemaId || cinemaName.includes(cinemaId)) {
-                    const cinemaCard = document.createElement('div');
-                    cinemaCard.className = 'card w-100 mb-3';
-                    cinemaCard.innerHTML = `
-                        <div class="card-body">
-                            <h5 class="montserrat-bold">
-                                ${cinemaName} &nbsp;<i class="bi bi-heart"></i>
-                            </h5>
-                            <div class="d-flex column-gap-2 mb-2">
-                                ${showtimes.map(showtime => `
-                                    <button class="btn btn-warning fw-bold" style="width: 5rem">
-                                        ${new Date(showtime.startingTime).toLocaleTimeString('vi-VN', {
-                                            hour: '2-digit',
-                                            minute: '2-digit'
-                                        })}
-                                    </button>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `;
-                    showtimesContainer.appendChild(cinemaCard);
-                }
-            });
-        })
-        .catch(error => console.error('Error fetching showtimes:', error));
-}
+        const regionId = document.getElementById('regionSelect').value;
+        const cinemaId = document.getElementById('cinemaSelect').value;
+        const selectedDateElement = document.querySelector('.show-date.selected');
+        const date = selectedDateElement ? selectedDateElement.dataset.date : '';
+
+        console.log('Selected Region ID:', regionId);
+        console.log('Selected Cinema ID:', cinemaId);
+        console.log('Selected Date:', date);
+
+        const currentUrl = new URL(window.location.href);
+        const baseUrl = currentUrl.pathname;
+
+        let url = `${baseUrl}?date=${date}`;
+        if (cinemaId) {
+            url += `&cinemaId=${cinemaId}`;
+        }
+        if (regionId) {
+            url += `&regionId=${regionId}`;
+        }
+
+        window.location.href = url;
+        
+        
+    }
 
     // document.getElementById('regionSelect').addEventListener('change', filterShowtimes);
     document.getElementById('cinemaSelect').addEventListener('change', filterShowtimes);

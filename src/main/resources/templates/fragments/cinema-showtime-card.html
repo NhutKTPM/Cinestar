@@ -7,32 +7,22 @@
 
 
 
-<div th:fragment="cinema-showtime-card" class="card w-100 mb-3">
+<div th:fragment="cinema-showtime-card(cinema)" class="card w-100 mb-3">
     <div class="card-body">
         <h5 class="montserrat-bold">
-            Rạp Cinestar Vincom Xuân Khánh &nbsp;<i
-                class="bi bi-heart"
-        ></i>
+            <span th:text="${cinema.key}"> Rạp Cinestar Vincom Xuân Khánh </span>
+            &nbsp;<i class="bi bi-heart"></i>
         </h5>
-        <h6 class="card-subtitle mb-2 text-body-secondary">
-            209 Đ. 30 Tháng 4, Xuân Khánh, Ninh Kiều, Cần Thơ
+        <h6 class="card-subtitle mb-2 text-body-secondary"
+            th:text="${cinema.value[0].room.cinema.address}">
+        209 Đ. 30 Tháng 4, Xuân Khánh, Ninh Kiều, Cần Thơ
         </h6>
         <div class="d-flex column-gap-2 mb-2">
-            <button class="btn btn-warning fw-bold" style="width: 5rem">
-                15:40
-            </button>
-            <button class="btn btn-warning fw-bold" style="width: 5rem">
-                18:00
-            </button>
-            <button class="btn btn-warning fw-bold" style="width: 5rem">
-                21:30
-            </button>
-            <button class="btn btn-warning fw-bold" style="width: 5rem">
-                18:00
-            </button>
-            <button class="btn btn-warning fw-bold" style="width: 5rem">
-                21:30
-            </button>
+            <th:block th:each="showtime : ${cinema.value}">
+                    <a th:href="@{/cart/{id}/seat(id=${showtime.showtimeId})}" class="btn btn-warning fw-bold" style="width: 5rem"
+                            th:text="${#temporals.format(showtime.startingTime, 'HH:mm')}">
+                    </a>
+            </th:block>
         </div>
     </div>
 </div>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
+
+<main>
+    <div class="container bg-secondary-subtle p-4">
+        <div class="row">
+            <div th:replace="~{fragments/admin-sidebar :: admin-sidebar}"></div>
+
+            <div class="col-10">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Tên loại ghế</th>
+                        <th scope="col">Giá</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="seatType: ${seatTypes}">
+                        <td th:text="${seatType.seatTypeId}">1</td>
+                        <td th:text="${seatType.seatTypeName}">Hà Nội</td>
+                        <td th:text="${seatType.price}">Hà Nội</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h2>Thêm khu vực</h2>
+                <form th:action="@{/admin/seatType/addSeatType}" method="post" th:object="${newSeatType}">
+                    <div class="mb-3">
+                        <label for="seatTypeName" class="form-label">Tên loại ghế</label>
+                        <input type="text" th:field="*{seatTypeName}" class="form-control" id="seatTypeName" >
+
+                        <label for="price" class="form-label">Giá vé</label>
+                        <input type="number" th:field="*{price}" class="form-control" id="price" >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</body>
+</html>

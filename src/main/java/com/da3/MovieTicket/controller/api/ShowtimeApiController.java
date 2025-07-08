@@ -25,10 +25,10 @@ public class ShowtimeApiController {
         this.cinemaService = cinemaService;
     }
 
-    @GetMapping("/api/showtimes")
-    public Map<String, List<ShowtimeEntity>> getShowtimes(@RequestParam LocalDate date, @RequestParam Long cinemaId) {
-        CinemaEntity cinema = null;
-        if (cinemaId != null) { cinema = cinemaService.getCinemaById(cinemaId); }
-        return showtimeService.getShowtimesGroupedByCinema(date, cinema);
-    }
+//    @GetMapping("/api/showtimes")
+//    public Map<String, List<ShowtimeEntity>> getShowtimes(@RequestParam LocalDate date, @RequestParam Long cinemaId) {
+//        CinemaEntity cinema = null;
+//        if (cinemaId != null) { cinema = cinemaService.getCinemaById(cinemaId); }
+//        return showtimeService.getShowtimesGroupedByCinema(date, cinema);
+//    }
 }

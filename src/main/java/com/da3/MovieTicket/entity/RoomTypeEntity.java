@@ -10,14 +10,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "seat")
+@Table(name = "roomType")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SeatEntity {
+public class RoomTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seatId;
+    private Long roomTypeId;
 
     @Column(columnDefinition = "TIMESTAMP")
     @CreationTimestamp
@@ -29,14 +29,5 @@ public class SeatEntity {
 
     private boolean enabled = true;
 
-    private String rowLabel;
-    private Integer seatNumber;
-
-    @ManyToOne
-    @JoinColumn(name = "roomId")
-    private RoomEntity room;
-
-    @ManyToOne
-    @JoinColumn(name = "seatTypeId", columnDefinition = "bigint default 1")
-    private SeatTypeEntity seatType;
+    private String roomTypeName;
 }

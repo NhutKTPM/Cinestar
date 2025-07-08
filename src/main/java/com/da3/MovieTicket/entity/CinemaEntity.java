@@ -35,4 +35,6 @@ public class CinemaEntity {
     @ManyToOne
     @JoinColumn(name = "regionId")
     private RegionEntity region;
+
+
 }

@@ -14,11 +14,14 @@ import java.util.stream.Collectors;
 public class SeatService {
     private final SeatRepository seatRepository;
     private final RoomRepository roomRepository;
+    private final SeatTypeService seatTypeService;
 
     @Autowired
-    public SeatService(SeatRepository seatRepository, RoomRepository roomRepository){
+    public SeatService(SeatRepository seatRepository, RoomRepository roomRepository,
+                       SeatTypeService seatTypeService){
         this.seatRepository = seatRepository;
         this.roomRepository = roomRepository;
+        this.seatTypeService = seatTypeService;
     }
 
     public List<SeatEntity> getAllSeats(){
@@ -45,6 +48,19 @@ public class SeatService {
                 seat.setRoom(room);
                 seat.setRowLabel(rowLabel);
                 seat.setSeatNumber(seatNum);
+                if (room.getRoomType().getRoomTypeId() == 3L){
+                    seat.setSeatType(seatTypeService.getSeatTypeById(4L));
+                }
+                else if (room.getRoomType().getRoomTypeId() == 2L){
+                    seat.setSeatType(seatTypeService.getSeatTypeById(3L));
+                } else {
+                    if (row <= 2) {
+                        seat.setSeatType(seatTypeService.getSeatTypeById(1L));
+                    } else {
+                        seat.setSeatType(seatTypeService.getSeatTypeById(2L));
+                    }
+                }
+
                 seatRepository.save(seat);
             }
         }

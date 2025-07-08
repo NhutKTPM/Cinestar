@@ -75,7 +75,7 @@
                             <option value="">-- Không chọn phòng chiếu --</option>
                             <option th:each="room : ${rooms}" th:if="${room.enabled}"
                                     th:value="${room.roomId}"
-                                    th:text="${room.roomName} + ' - ' + ${room.cinema.cinemaName}"></option>
+                                    th:text="${room.roomName} + ' - ' + ${room.roomType.roomTypeName} + ' - ' + ${room.cinema.cinemaName}"></option>
                         </select>
 
                     </div>
@@ -94,8 +94,8 @@
                     <tbody>
                     <tr th:each="showtime: ${showtimes}">
                         <td th:text="${showtime.showtimeId}">1</td>
-                        <td th:text="${showtime.startingTime}">Hà Nội</td>
-                        <td th:text="${showtime.room.roomName} + ' - ' + ${showtime.room.cinema.cinemaName}">Hà Nội</td>
+                        <td th:text="${#temporals.format(showtime.startingTime, 'dd/MM/yyyy HH:mm')}">Hà Nội</td>
+                        <td th:text="${showtime.room.roomName} + ' - ' + ${showtime.room.roomType.roomTypeName} + ' - ' + ${showtime.room.cinema.cinemaName}">Hà Nội</td>
                     </tr>
                     </tbody>
                 </table>

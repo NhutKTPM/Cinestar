@@ -15,7 +15,9 @@
                     <tr>
                         <th scope="col">Id</th>
                         <th scope="col">Tên phòng</th>
+                        <th scope="col">Loại phòng</th>
                         <th scope="col">Rạp</th>
+                        <th scope="col">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -24,6 +26,8 @@
                         <td th:text="${room.roomName}">Hà Nội</td>
                         <td th:if="${room.cinema != null}" th:text="${room.cinema.cinemaName}">Hà Nội</td>
                         <td th:if="${room.cinema == null}">Không có</td>
+                        <td th:text="${room.roomType.roomTypeName}">Hà Nội</td>
+                        <td> <a th:href="@{/admin/room/initializeRoomSeats/{id}(id=${room.roomId})}" class="btn btn-primary">Tạo ghế</a></td>
                     </tr>
                     </tbody>
                 </table>
@@ -39,6 +43,13 @@
                             <option th:each="cinema : ${cinemas}" th:if="${cinema.enabled}"
                                     th:value="${cinema.cinemaId}"
                                     th:text="${cinema.cinemaName}"></option>
+                        </select>
+
+                        <label for="roomTypeId" class="form-label">Chọn khu vực</label>
+                        <select class="form-select" id="roomTypeId" name="roomTypeId">
+                            <option th:each="roomType : ${roomTypes}" th:if="${roomType.enabled}"
+                                    th:value="${roomType.roomTypeId}"
+                                    th:text="${roomType.roomTypeName}"></option>
                         </select>
 
 

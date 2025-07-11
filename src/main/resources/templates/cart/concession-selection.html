@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+
+<div class="container bg-secondary-subtle p-4">
+    <div class="row pb-5">
+        <div class="col-8">
+
+            <h2 class="montserrat-display mb-3">Chọn bắp nước</h2>
+            <div class="row row-cols-3 row-gap-4">
+                <div th:each="concession: ${concessions}" class="col">
+
+                    <div class="card">
+                        <img th:src="@{${concession.image}}" class="card-img-top" />
+                        <div class="card-body">
+                            <h5 class="card-title montserrat-bold" th:text="${concession.concessionName}">Dragon Combo 1</h5>
+                            <div class="card-text d-flex justify-content-between">
+                                <div th:text="${concession.price}">389.000 đ</div>
+                                <a href="#" class="btn btn-warning">Thêm</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div th:replace="~{fragments/cart :: cart(${showtime})}"></div>
+
+
+    </div>
+
+</div>
+
+</main>
+</body>
+</html>

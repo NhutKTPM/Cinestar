@@ -2,7 +2,7 @@ package com.da3.MovieTicket.mapper;
 
 import com.da3.MovieTicket.dto.CartConcessionItemDTO;
 import com.da3.MovieTicket.dto.CartDTO;
-import com.da3.MovieTicket.entity.SeatEntity;
+import com.da3.MovieTicket.entity.*;
 import com.da3.MovieTicket.model.Cart;
 import com.da3.MovieTicket.model.CartConcessionItem;
 import org.springframework.stereotype.Component;
@@ -39,4 +39,54 @@ public class CartMapper {
         
         return itemDTO;
     }
+
+
+    public CartDTO toDto(BillEntity bill) {
+        CartDTO cartDTO = new CartDTO();
+
+        // Map movie details
+        ShowtimeEntity showtime = bill.getShowtime();
+        cartDTO.setPoster(showtime.getMovie().getPoster());
+        cartDTO.setMovieName(showtime.getMovie().getMovieName());
+        cartDTO.setRoomType(showtime.getRoom().getRoomType().getRoomTypeName());
+        cartDTO.setStartingTime(showtime.getStartingTime());
+        cartDTO.setCinema(showtime.getRoom().getCinema().getCinemaName());
+        cartDTO.setRoom(showtime.getRoom().getRoomName());
+
+        // Map seats from tickets
+        cartDTO.setSeats(bill.getTickets().stream()
+                .map(ticket -> ticket.getSeat().getSeatName())
+                .sorted()
+                .collect(Collectors.joining(", ")));
+
+
+        Long totalTicket = 0L;
+        // Add seats total
+        for (TicketEntity ticket : bill.getTickets()) {
+            totalTicket = totalTicket + ticket.getSeat().getSeatType().getPrice();
+        }
+        cartDTO.setTotalTicket(totalTicket);
+
+        // Map concession items
+        cartDTO.setConcessionItems(bill.getConcessionItems().stream()
+                .map(this::toBillConcessionDto)
+                .collect(Collectors.toList()));
+
+        // Calculate total (you might want to adjust this based on your business logic)
+        Long totalConcession = bill.getConcessionItems().stream()
+                .mapToLong(item -> item.getConcession().getPrice() * item.getQuantity())
+                .sum();
+        cartDTO.setTotal(totalConcession + totalTicket);
+
+        return cartDTO;
+    }
+
+    private CartConcessionItemDTO toBillConcessionDto(BillConcessionItemEntity item) {
+        CartConcessionItemDTO itemDTO = new CartConcessionItemDTO();
+        itemDTO.setConcessionName(item.getConcession().getConcessionName());
+        itemDTO.setQuantity(item.getQuantity());
+        itemDTO.setTotalPrice(item.getConcession().getPrice() * item.getQuantity());
+        return itemDTO;
+    }
+
 }

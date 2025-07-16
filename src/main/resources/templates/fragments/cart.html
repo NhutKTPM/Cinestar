@@ -70,7 +70,10 @@
             <div class="col-12 text-primary montserrat-bold">Bắp nước</div>
         </div>
         <div id="concession-items">
-
+            <div th:each="item : ${cart.concessionItems}" class="d-flex justify-content-between">
+                <div th:text="${item.concessionName} + (${item.quantity > 1} ? ' x' + ${item.quantity} : '')"></div>
+                <div th:text="${#numbers.formatDecimal(item.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'"></div>
+            </div>
         </div>
 
         <hr />

@@ -82,6 +82,9 @@ public class AdminMovieController {
         List<ShowtimeEntity> showtimes = showtimeService.getShowtimeOfMovie(movie);
         model.addAttribute("showtimes", showtimes);
 
+        List<GenreEntity> genres = genreService.getAllGenres();
+        model.addAttribute("genres", genres);
+
 
         return "admin/admin-movie-detail";
     }
@@ -95,4 +98,6 @@ public class AdminMovieController {
         showtimeService.createShowtime(newShowtime);
         return "redirect:/admin/movie/" + newShowtime.getMovie().getMovieId();
     }
+
+
 }

@@ -47,6 +47,26 @@
                 <div><strong>Quốc gia:</strong> <span th:text="${movie.country}"></span></div>
                 <!--            <div><strong>Nhà sản xuất:</strong> <span th:text="${movie.length}"></span></div>-->
                 <div><strong>Thể loại:</strong> Phiêu lưu</div>
+
+                <h2>Thêm thể loại</h2>
+                <form th:action="@{/admin/cinema/addCinema}" method="post" th:object="${newCinema}">
+                    <div class="mb-3">
+                        <label for="regionId" class="form-label">Chọn khu vực</label>
+                        <select class="form-select" id="regionId" name="regionId">
+                            <option value="">-- Không chọn khu vực --</option>
+                            <option th:each="region : ${regions}" th:if="${region.enabled}"
+                                    th:value="${region.regionId}"
+                                    th:text="${region.regionName}"></option>
+                        </select>
+
+
+                    </div>
+
+
+
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </form>
+
                 <div><strong>Đạo diễn:</strong> <span th:text="${movie.director}"></span></div>
                 <div>
                     <strong>Diễn viên:</strong> <span th:text="${movie.actors}"></span>

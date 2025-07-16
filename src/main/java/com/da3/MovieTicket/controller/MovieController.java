@@ -58,7 +58,7 @@ public class MovieController {
         List<LocalDate> showDates = showtimeService.getDistinctShowDatesForMovie(movie);
         model.addAttribute("showDates", showDates);
 
-        if (date == null) { date = showDates.getFirst();}
+        if (date == null && !showDates.isEmpty()) { date = showDates.getFirst();}
 
         CinemaEntity cinema = null;
         RegionEntity region = null;

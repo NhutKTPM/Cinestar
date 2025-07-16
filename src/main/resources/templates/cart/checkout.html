@@ -87,7 +87,15 @@
             </div>
         </div>
 
-        <div th:replace="~{fragments/cart :: cart(${showtime})}"></div>
+        <div class="col-4">
+            <div th:replace="~{fragments/cart :: cart(${showtime})}"></div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <div class="btn btn-secondary">Trở lại</div>
+                <a th:href="@{/cart/{id}/checkout(id=${showtime.showtimeId})}" class="btn btn-warning">Thanh toán</a>
+            </div>
+
+        </div>
 
 
     </div>
@@ -96,4 +104,67 @@
 
 </main>
 </body>
+<script>
+    const token = document.querySelector("meta[name='_csrf']").getAttribute("content");
+    const header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+
+    fetch('/cart/getCart', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            [header]: token // Add CSRF token to request headers
+        }
+    })
+    .then(response => response.json())
+    .then(cart => {
+        console.log(cart);
+        updateCartDisplay(cart);
+    });
+
+    function updateCartDisplay(cart) {
+        // First update the seats display (reuse existing function)
+        const selectedSeatsElement = document.getElementById('selected-seats');
+        const seatLabels = cart.selectedSeats.map(seat => seat.rowLabel + seat.seatNumber).join(', ');
+        selectedSeatsElement.textContent = seatLabels;
+
+        // Update total price
+        const totalTicketElement = document.getElementById('total-ticket');
+        totalTicketElement.textContent = `${cart.totalTicket.toLocaleString('vi-VN')} đ`;
+
+        // Find the "Bắp nước" section
+        const concessionSection = document.getElementById('concession-items');
+        if (!concessionSection) return;
+
+        // Clear existing concession items
+        while (concessionSection.firstChild) {
+            concessionSection.removeChild(concessionSection.firstChild);
+        }
+
+
+        // Add new concession items
+        if (cart.concessionItems && cart.concessionItems.length > 0) {
+            cart.concessionItems.forEach(item => {
+                const concessionDiv = document.createElement('div');
+                concessionDiv.className = 'd-flex justify-content-between';
+
+                const nameDiv = document.createElement('div');
+                nameDiv.textContent = `${item.concession.concessionName}${item.quantity > 1 ? ` x${item.quantity}` : ''}`;
+
+                const priceDiv = document.createElement('div');
+                priceDiv.textContent = `${(item.concession.price * item.quantity).toLocaleString('vi-VN')} đ`;
+
+                concessionDiv.appendChild(nameDiv);
+                concessionDiv.appendChild(priceDiv);
+
+                concessionSection.appendChild(concessionDiv);
+            });
+        }
+
+        // Update total price
+        const totalElement = document.getElementById('total');
+        if (totalElement) {
+            totalElement.textContent = `${cart.total.toLocaleString('vi-VN')} đ`;
+        }
+    }
+</script>
 </html>

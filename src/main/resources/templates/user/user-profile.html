@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+
+
+    <div class="container bg-secondary-subtle p-4">
+        <div class="row">
+
+
+            <div class="col-3">
+
+
+                <ul class="nav flex-column ">
+                    <li class="nav-item">
+                        <a class="nav-link montserrat-bold text-light" aria-current="page" href="#">Thông tin chung</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link montserrat-bold text-light" href="#">Vé của tôi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link montserrat-bold text-light" href="#">Điểm thưởng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link montserrat-bold text-light" href="#">Thẻ quà tặng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link montserrat-bold text-light" href="#">Lịch sử giao dịch</a>
+                    </li>
+                </ul>
+
+
+            </div>
+            <div class="col-9">
+                <h5 class="montserrat-bold">Thông tin tài khoản</h5>
+                <div th:text="${user.fullName}">Tên: Huỳnh Minh Nhựt</div>
+                <div th:text="${user.email}">Email: minhnhut@gmail.com</div>
+                <div>Số điện thoại: *******123</div>
+                <div class="btn btn-primary mt-2">Thay đổi</div>
+                <hr>
+                <h5 class="montserrat-bold">Điểm thưởng</h5>
+
+                <h5>12 điểm</h5>
+
+                <hr>
+<!--                <h5 class="montserrat-bold">Rạp yêu thích</h5>-->
+
+<!--                <div class="card w-50">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title montserrat-bold">Rạp Cinestar Vincom Xuân Khánh</h5>-->
+<!--                        <h6 class="card-subtitle mb-2 text-body-secondary mt-2">-->
+<!--                            209 Đ. 30 Tháng 4, Xuân Khánh, Ninh Kiều, Cần Thơ-->
+<!--                        </h6>-->
+<!--                        <div class="btn btn-primary mt-2">Đặt vé</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <h5 class="montserrat-bold">Hóa đơn</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Phim</th>
+                            <th>Ngày</th>
+                            <th>Tổng tiền</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="bill : ${bills}">
+                            <td th:text="${bill.showtime.movie.movieName}"></td>
+                            <td th:text="${#temporals.format(bill.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td class="text-warning"
+                                th:text="${#numbers.formatDecimal(bill.total, 0, 'COMMA', 0, 'POINT')} + ' đ'"></td>
+                            <td>
+                                <a th:href="@{/bill/{id}(id=${bill.billId})}" class="btn btn-primary btn-sm">Xem</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+</body>
+</html>

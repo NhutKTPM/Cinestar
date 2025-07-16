@@ -27,4 +27,13 @@ public class Cart {
         }
         return total;
     }
+
+    public Long getTotalTicket(){
+        Long total = 0L;
+        // Add seats total
+        for (SeatEntity seat : selectedSeats) {
+            total = total + seat.getSeatType().getPrice();
+        }
+        return total;
+    }
 }

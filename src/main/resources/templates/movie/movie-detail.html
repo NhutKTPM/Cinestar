@@ -89,7 +89,7 @@
             </div>
 
 
-            <div class="d-flex column-gap-2 mb-3">
+            <div th:if="${not #lists.isEmpty(showDates)}" class="d-flex column-gap-2 mb-3">
                 <div th:each="showDate : ${showDates}"
                      th:data-date="${#temporals.format(showDate, 'yyyy-MM-dd')}"
                      class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center show-date"
@@ -99,10 +99,18 @@
                 </div>
             </div>
 
-            <!-- Showtimes by cinemas -->
+            <div th:if="${#lists.isEmpty(showDates)}" class="mb-3">
+                Không tìm thấy ngày chiếu
+            </div>
 
-            <div th:each="cinema : ${showtimesByCinema}">
-                <div th:replace="~{fragments/cinema-showtime-card :: cinema-showtime-card(${cinema})}"></div>
+            <!-- Showtimes by cinemas -->
+            <div th:if="${#maps.isEmpty(showtimesByCinema)}" class="mb-3">
+                Không tìm thấy suất chiếu
+            </div>
+            <div th:if="${not #maps.isEmpty(showtimesByCinema)}">
+                <div th:each="cinema : ${showtimesByCinema}">
+                    <div th:replace="~{fragments/cinema-showtime-card :: cinema-showtime-card(${cinema})}"></div>
+                </div>
             </div>
 
 
@@ -184,13 +192,19 @@
             dates.forEach(date => {
                 if (date.dataset.date === dateParam) {
                     date.classList.add('selected');
-                    date.style.backgroundColor = '#ffc107';
+                    date.classList.remove('border-warning-subtle');
+                    date.classList.remove('border');
+                    date.classList.add('bg-light');
+                    date.classList.add('text-dark');
                 }
             });
         } else if (dates.length > 0) {
             // If no date parameter, select first date
             dates[0].classList.add('selected');
-            dates[0].style.backgroundColor = '#ffc107';
+            dates[0].classList.remove('border-warning-subtle');
+            dates[0].classList.remove('border');
+            dates[0].classList.add('bg-light');
+            dates[0].classList.add('text-dark');
         }
 
         dates.forEach(date => {

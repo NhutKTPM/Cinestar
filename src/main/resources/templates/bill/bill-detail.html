@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+
+<div class="container bg-secondary-subtle p-4">
+    <div class="row pb-5">
+        <div class="col-4">
+
+        </div>
+
+        <div class="col-4">
+
+            <div class="border p-3">
+                <div class="row mb-1">
+                    <div class="col-12 text-primary montserrat-bold">Thông tin vé</div>
+                </div>
+                <div class="row d-flex">
+                    <img
+                            th:src="@{${bill.showtime.movie.poster}}"
+                            class="col-4 object-fit-cover"
+                            style="height: 6.5rem"
+                    />
+                    <div class="col-8">
+                        <div class="fw-bold" th:text="${bill.showtime.movie.movieName}">Từ Vũ Trụ John Wick: Ballerina</div>
+                        <div th:text="${bill.showtime.room.roomType.roomTypeName}">2D</div>
+                        <div class="badge text-bg-warning">P</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4 text-secondary">Ngày chiếu:</div>
+                    <div class="col-8" th:text="${#temporals.format(bill.showtime.startingTime, 'dd/MM/yyyy')}">27/6/2025</div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-secondary">Giờ chiếu:</div>
+                    <div class="col-8" th:text="${#temporals.format(bill.showtime.startingTime, 'HH:mm')}">17:50</div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-secondary">Rạp chiếu:</div>
+                    <div class="col-8" th:text="${bill.showtime.room.cinema.cinemaName}">Vincom Xuân Khánh Phòng 04</div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-secondary">Phòng chiếu:</div>
+                    <div class="col-8" th:text="${bill.showtime.room.roomName}">Vincom Xuân Khánh Phòng 04</div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-secondary">Ghế:</div>
+                    <div id="selected-seats" class="col-8">
+                        <span th:each="ticket,iter : ${bill.tickets}">
+                            <span th:text="${ticket.seat.rowLabel} + ${ticket.seat.seatNumber}"></span><span th:unless="${iter.last}">, </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div id="total-ticket" class="col-8 text-warning fw-bold text-end"
+                         th:text="${#numbers.formatDecimal(bill.totalTicket, 0, 'COMMA', 0, 'POINT')} + ' đ'"></div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-12 text-primary montserrat-bold">Bắp nước</div>
+                </div>
+                <div id="concession-items">
+                    <div th:each="item : ${bill.concessionItems}" class="row">
+                        <div class="col-6" th:text="${item.concession.concessionName}"></div>
+                        <div class="col-1" th:text="${item.quantity}"></div>
+                        <div class="col-5 text-warning fw-bold text-end"
+                             th:text="${#numbers.formatDecimal(item.concession.price * item.quantity, 0, 'COMMA', 0, 'POINT')} + ' đ'"></div>
+                    </div>
+                </div>
+
+                <hr />
+                <div class="d-flex justify-content-between">
+                    <div class="text-primary montserrat-bold">Tổng tiền</div>
+                    <div id="total" class="fw-bold text-warning"
+                         th:text="${#numbers.formatDecimal(bill.total, 0, 'COMMA', 0, 'POINT')} + ' đ'"></div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+        <div class="col-4"></div>
+
+
+    </div>
+
+</div>
+
+</main>
+</body>
+<script th:inline="javascript">
+
+    
+</script>
+</html>

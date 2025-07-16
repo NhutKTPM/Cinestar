@@ -40,4 +40,8 @@ public class UserEntity {
 
     @Column(nullable = false)
     private String lastName;
+
+    public String getFullName() {
+        return lastName + " " + firstName;
+    }
 }

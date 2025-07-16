@@ -23,69 +23,62 @@
 </a>
 
 
-<div th:fragment="cart(showtime)" class="col-4 ">
+<div th:fragment="cart(cart)">
     <div class="border p-3">
         <div class="row mb-1">
             <div class="col-12 text-primary montserrat-bold">Thông tin vé</div>
         </div>
         <div class="row d-flex">
             <img
-                    th:src="@{${showtime.movie.poster}}"
+                    th:src="@{${cart.poster}}"
                     class="col-4 object-fit-cover"
                     style="height: 6.5rem"
             />
             <div class="col-8">
-                <div class="fw-bold" th:text="${showtime.movie.movieName}">Từ Vũ Trụ John Wick: Ballerina</div>
-                <div th:text="${showtime.room.roomType.roomTypeName}">2D</div>
+                <div class="fw-bold" th:text="${cart.movieName}">Từ Vũ Trụ John Wick: Ballerina</div>
+                <div th:text="${cart.roomType}">2D</div>
                 <div class="badge text-bg-warning">P</div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-4 text-secondary">Ngày chiếu:</div>
-            <div class="col-8" th:text="${#temporals.format(showtime.startingTime, 'dd/MM/yyyy')}">27/6/2025</div>
+            <div class="col-8" th:text="${#temporals.format(cart.startingTime, 'dd/MM/yyyy')}">27/6/2025</div>
         </div>
         <div class="row">
             <div class="col-4 text-secondary">Giờ chiếu:</div>
-            <div class="col-8" th:text="${#temporals.format(showtime.startingTime, 'HH:mm')}">17:50</div>
+            <div class="col-8" th:text="${#temporals.format(cart.startingTime, 'HH:mm')}">17:50</div>
         </div>
         <div class="row">
             <div class="col-4 text-secondary">Rạp chiếu:</div>
-            <div class="col-8" th:text="${showtime.room.cinema.cinemaName}">Vincom Xuân Khánh Phòng 04</div>
+            <div class="col-8" th:text="${cart.cinema}">Vincom Xuân Khánh Phòng 04</div>
         </div>
         <div class="row">
             <div class="col-4 text-secondary">Phòng chiếu:</div>
-            <div class="col-8" th:text="${showtime.room.roomName}">Vincom Xuân Khánh Phòng 04</div>
+            <div class="col-8" th:text="${cart.room}">Vincom Xuân Khánh Phòng 04</div>
         </div>
         <div class="row">
             <div class="col-4 text-secondary">Ghế:</div>
-            <div class="col-8">F6, F7, F8</div>
+            <div id="selected-seats" class="col-8" th:text="${cart.seats}"></div>
         </div>
         <div class="row">
             <div class="col-4"></div>
-            <div class="col-8 text-warning fw-bold text-end">240.000 đ</div>
+            <div id="total-ticket" class="col-8 text-warning fw-bold text-end" th:text="${#numbers.formatDecimal(cart.totalTicket, 0, 'COMMA', 0, 'POINT')} + ' đ'"></div>
         </div>
         <hr />
         <div class="row">
             <div class="col-12 text-primary montserrat-bold">Bắp nước</div>
         </div>
-        <div class="d-flex justify-content-between">
-            <div class="">Standard Combo</div>
-            <div class="">99.000 đ</div>
+        <div id="concession-items">
+
         </div>
-        <div class="d-flex justify-content-between">
-            <div class="">Premium Combo x2</div>
-            <div class="">298.000 đ</div>
-        </div>
+
         <hr />
         <div class="d-flex justify-content-between">
             <div class="text-primary montserrat-bold">Tổng tiền</div>
-            <div class="fw-bold text-warning">637.000 đ</div>
+            <div id="total" class="fw-bold text-warning" th:text="${#numbers.formatDecimal(cart.total, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</div>
         </div>
-        <div class="d-flex justify-content-between mt-3">
-            <div class="btn btn-secondary">Trở lại</div>
-            <a class="btn btn-warning">Tiếp tục</a>
-        </div>
+
     </div>
 </div>
 

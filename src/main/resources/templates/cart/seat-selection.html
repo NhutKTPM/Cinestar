@@ -76,8 +76,15 @@
 
         </div>
 
-        <div th:replace="~{fragments/cart :: cart(${showtime})}"></div>
+        <div class="col-4">
+            <div th:replace="~{fragments/cart :: cart(${cart})}"></div>
 
+            <div class="d-flex justify-content-between mt-3">
+                <div class="btn btn-secondary">Trở lại</div>
+                <a th:href="@{/cart/{id}/concession(id=${showtime.showtimeId})}" class="btn btn-warning">Tiếp tục</a>
+            </div>
+
+        </div>
 
     </div>
 
@@ -85,4 +92,94 @@
 
 </main>
 </body>
+
+<script>
+
+    // Add to seat-selection.html
+    function toggleSeat(seatId) {
+        // Get CSRF token from meta tag
+        const token = document.querySelector("meta[name='_csrf']").getAttribute("content");
+        const header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+
+        fetch(`/cart/seats/add/${seatId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [header]: token // Add CSRF token to request headers
+
+            }
+        })
+        .then(response => response.json())
+        .then(cart => {
+            console.log(cart);
+            // Update cart display
+            updateCartDisplay(cart);
+        });
+    }
+
+    function removeSeat(seatId) {
+        // Get CSRF token from meta tag
+        const token = document.querySelector("meta[name='_csrf']").getAttribute("content");
+        const header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+        fetch(`/cart/seats/remove/${seatId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [header]: token // Add CSRF token to request headers
+            }
+        })
+        .then(response => response.json())
+        .then(cart => {
+            console.log(cart);
+            // Update cart display
+            updateCartDisplay(cart);
+
+        });
+    }
+    
+    function updateCartDisplay(cart) {
+        // Update selected seats display
+        const selectedSeatsElement = document.getElementById('selected-seats');
+        selectedSeatsElement.textContent = cart.seats;
+
+        // Update total price
+        const totalTicketElement = document.getElementById('total-ticket');
+        totalTicketElement.textContent = `${cart.totalTicket.toLocaleString('vi-VN')} đ`;
+        const totalElement = document.getElementById('total');
+        totalElement.textContent = `${cart.total.toLocaleString('vi-VN')} đ`;
+    }
+    
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const seatButtons = document.querySelectorAll('[data-seat-id]');
+    
+        seatButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const seatId = this.getAttribute('data-seat-id');
+
+                // If seat is already selected (has bg-light class), remove it
+                if (this.classList.contains('bg-light')) {
+                    removeSeat(seatId);
+                    this.classList.remove('bg-light');
+                    this.classList.remove('border-light');
+                } else {
+                    // If seat is not selected, add it
+                    toggleSeat(seatId);
+                    this.classList.add('bg-light');
+                    this.classList.add('border-light');
+                }
+            });
+
+
+
+        });
+    });
+    
+    
+
+
+
+
+</script>
+
 </html>

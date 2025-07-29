@@ -18,32 +18,26 @@ import java.util.List;
 
 @Controller
 public class CartController {
-    private final CartService cartService;
-    private final ShowtimeService showtimeService;
-    private final SeatService seatService;
-    private final ConcessionService concessionService;
-    private final BillService billService;
-    private final TicketService ticketService;
-    private final BillConcessionItemService billConcessionItemService;
-    private final CartMapper cartMapper;
-
     @Autowired
-    public CartController(ShowtimeService showtimeService, SeatService seatService,
-                          ConcessionService concessionService,
-                          CartService cartService,
-                          BillService billService,
-                          TicketService ticketService,
-                          BillConcessionItemService billConcessionItemService,
-                          CartMapper cartMapper){
-        this. showtimeService = showtimeService;
-        this.seatService = seatService;
-        this.concessionService = concessionService;
-        this.cartService = cartService;
-        this.billService = billService;
-        this.ticketService = ticketService;
-        this.billConcessionItemService = billConcessionItemService;
-        this.cartMapper = cartMapper;
-    }
+    private CartService cartService;
+    @Autowired
+    private ShowtimeService showtimeService;
+    @Autowired
+    private SeatService seatService;
+    @Autowired
+    private ConcessionService concessionService;
+    @Autowired
+    private BillService billService;
+    @Autowired
+    private TicketService ticketService;
+    @Autowired
+    private BillConcessionItemService billConcessionItemService;
+    @Autowired
+    private CartMapper cartMapper;
+    @Autowired
+    private GiftCardService giftCardService;
+
+
 
     @GetMapping("/cart/{id}/seat")
     public String showSeats(@PathVariable("id") long showtimeId, Model model) {
@@ -73,10 +67,6 @@ public class CartController {
 
         model.addAttribute("showtime", showtime);
 
-//        List<List<SeatEntity>> seatLayout = seatService.getSeatLayout(showtime.getRoom());
-//
-//        model.addAttribute("seatLayout", seatLayout);
-
         List<ConcessionEntity> concessions = concessionService.getAllConcessions();
         model.addAttribute("concessions", concessions);
 
@@ -87,7 +77,8 @@ public class CartController {
     }
 
     @GetMapping("/cart/{id}/checkoutPage")
-    public String showCheckoutPage(@PathVariable("id") long showtimeId, Model model) {
+    public String showCheckoutPage(@PathVariable("id") long showtimeId, Model model,
+                                   @AuthenticationPrincipal CustomUserDetails currentUser) {
         ShowtimeEntity showtime = showtimeService.getShowtimeById(showtimeId);
 
 
@@ -96,6 +87,7 @@ public class CartController {
 
         model.addAttribute("cart", cartMapper.toDto(cartService.getCart()));
 
+        model.addAttribute("giftCards", giftCardService.getAllGiftCardsOfRecipient(currentUser.getId()));
 
         return "cart/checkout";
     }
@@ -177,4 +169,11 @@ public class CartController {
         return ResponseEntity.ok(cartMapper.toDto(cartService.getCart()));
     }
 
+
+    @PostMapping("/cart/giftcards/use/{giftCardId}")
+    @ResponseBody
+    public ResponseEntity<?> useGiftCard(@PathVariable Long giftCardId){
+        cartService.addGiftCard(giftCardService.getGiftCardById(giftCardId));
+        return ResponseEntity.ok(cartMapper.toDto(cartService.getCart()));
+    }
 }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
+
+<main>
+    <div class="container bg-secondary-subtle p-4">
+        <div class="row">
+            <div th:replace="~{fragments/admin-sidebar :: admin-sidebar}"></div>
+
+            <div class="col-10">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Hình ảnh</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="giftCardImage: ${giftCardImages}">
+                        <td th:text="${giftCardImage.id}">1</td>
+                        <td>
+                            <img
+                                th:src="@{${giftCardImage.image}}"
+                                alt=""
+                                style="height:100px;"
+                            />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h2>Thêm hình thẻ quà tặng</h2>
+                <form th:action="@{/admin/gift_card_image/add_gift_card_image}" method="post" enctype="multipart/form-data" th:object="${newGiftCardImage}">
+                    <div class="mb-3">
+
+                        <label for="imageFile" class="form-label">Poster</label>
+                        <input type="file" name="imageFile" accept="image/*" class="form-control" id="imageFile">
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</body>
+</html>

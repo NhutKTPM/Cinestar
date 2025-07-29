@@ -46,17 +46,21 @@
                 </div>
                 <div><strong>Quốc gia:</strong> <span th:text="${movie.country}"></span></div>
                 <!--            <div><strong>Nhà sản xuất:</strong> <span th:text="${movie.length}"></span></div>-->
-                <div><strong>Thể loại:</strong> Phiêu lưu</div>
+                <div><strong>Thể loại:</strong>
+                    <span th:each="genre,iterStat : ${movie.genres}">
+                        <span class="badge text-bg-light" th:text="${genre.genreName}"></span>
+                    </span>
+                </div>
 
                 <h2>Thêm thể loại</h2>
-                <form th:action="@{/admin/cinema/addCinema}" method="post" th:object="${newCinema}">
+                <form th:action="@{/admin/movie/{id}/addGenre(id=${movie.movieId})}" method="post">
                     <div class="mb-3">
-                        <label for="regionId" class="form-label">Chọn khu vực</label>
-                        <select class="form-select" id="regionId" name="regionId">
-                            <option value="">-- Không chọn khu vực --</option>
-                            <option th:each="region : ${regions}" th:if="${region.enabled}"
-                                    th:value="${region.regionId}"
-                                    th:text="${region.regionName}"></option>
+                        <label for="genreId" class="form-label">Chọn thể loại</label>
+                        <select class="form-select" id="genreId" name="genreId">
+                            <option value="">-- Không chọn thể loại --</option>
+                            <option th:each="genre : ${genres}" th:if="${genre.enabled}"
+                                    th:value="${genre.genreId}"
+                                    th:text="${genre.genreName}"></option>
                         </select>
 
 

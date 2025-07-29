@@ -18,4 +18,5 @@ public class CartDTO {
     private Long totalTicket;
     private List<CartConcessionItemDTO> concessionItems = new ArrayList<>();
     private Long total;
+    private List<GiftCardUsageDTO> giftCardUsages = new ArrayList<>();
 }

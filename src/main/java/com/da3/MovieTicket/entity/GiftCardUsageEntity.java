@@ -8,18 +8,16 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Table(name = "genre")
+@Table(name = "giftCardUsage")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenreEntity {
+public class GiftCardUsageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long genreId;
+    private Long id;
 
     @Column(columnDefinition = "TIMESTAMP")
     @CreationTimestamp
@@ -31,9 +29,11 @@ public class GenreEntity {
 
     private boolean enabled = true;
 
-    private String genreName;
+    private Long usedAmount;
 
-    @ManyToMany(mappedBy = "genres")
-    private Set<MovieEntity> movies = new HashSet<>();
+    @ManyToOne
+    private GiftCardEntity giftCard;  // the gift card used
 
+    @ManyToOne
+    private BillEntity bill; // the bill that the gift card is used for
 }

@@ -11,7 +11,16 @@ import java.util.List;
 @Repository
 public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
     List<MovieEntity> findTop8ByEnabledTrueAndShowDateLessThanEqualOrderByShowDateDesc(LocalDate currentDate);
+    
+    List<MovieEntity> findByEnabledTrueAndShowDateLessThanEqualOrderByShowDateDesc(LocalDate currentDate);
 
     List<MovieEntity> findTop8ByEnabledTrueAndShowDateGreaterThanOrderByShowDateAsc(LocalDate currentDate);
 
+    List<MovieEntity> findByEnabledTrueAndShowDateGreaterThanOrderByShowDateAsc(LocalDate currentDate);
+
+    List<MovieEntity> findAllByOrderByShowDateDesc();
+
+    List<MovieEntity> findByGenresGenreIdAndEnabledTrue(Long genreId);
+
+    List<MovieEntity> findByMovieNameContainingIgnoreCaseAndEnabledTrue(String searchTerm);
 }

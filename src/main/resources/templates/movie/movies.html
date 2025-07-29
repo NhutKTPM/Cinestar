@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+
+<body class="container">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+
+<div class="container bg-secondary-subtle p-4">
+    <div>
+        <a href="/movie?showingOrUpcoming=showing" class="btn btn-outline-light me-2">Đang chiếu</a>
+        <a href="/movie?showingOrUpcoming=upcoming" class="btn btn-outline-light">Sắp chiếu</a>
+    </div>
+
+    <div class="mt-3">
+        <span th:each="genre : ${genres}">
+            <a class="btn btn-outline-light me-2" th:text="${genre.genreName}"
+               th:href="@{/movie(genreId=${genre.genreId})}"
+            ></a>
+        </span>
+    </div>
+
+
+    <div class="row row-gap-4 mb-3 mt-3">
+        <div th:each="movie: ${movies}" class="col-3">
+            <div th:replace="~{fragments/movieCard :: movieCard(${movie})}"></div>
+        </div>
+    </div>
+
+</div>
+
+</main>
+
+
+</body>
+</html>

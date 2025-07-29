@@ -13,6 +13,7 @@ public class Cart {
     private ShowtimeEntity showtime;
     private List<SeatEntity> selectedSeats = new ArrayList<>();
     private List<CartConcessionItem> concessionItems = new ArrayList<>();
+    private List<CartGiftCardUsage> giftCardUsages = new ArrayList<>();
 
     public Long getTotal() {
         Long total = 0L;
@@ -24,6 +25,10 @@ public class Cart {
         for (CartConcessionItem item : concessionItems) {
             total = total + (item.getConcession().getPrice()
                     * (long) item.getQuantity());
+        }
+        // Subtract gift cards' amount
+        for (CartGiftCardUsage giftCardUsage : giftCardUsages) {
+            total = total - giftCardUsage.getUsedAmount();
         }
         return total;
     }

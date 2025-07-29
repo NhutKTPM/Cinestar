@@ -54,7 +54,11 @@
                 </div>
             </div>
             <div><strong>Quốc gia:</strong> <span th:text="${movie.country}"></span></div>
-            <div><strong>Thể loại:</strong> Phiêu lưu</div>
+            <div><strong>Thể loại:</strong>
+                <span th:each="genre,iterStat : ${movie.genres}">
+                        <span class="badge text-bg-light" th:text="${genre.genreName}"></span>
+                </span>
+            </div>
             <div><strong>Đạo diễn:</strong> <span th:text="${movie.director}"></span></div>
             <div>
                 <strong>Diễn viên:</strong> <span th:text="${movie.actors}"></span>

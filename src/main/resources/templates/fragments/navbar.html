@@ -12,12 +12,13 @@
         >CINESTAR</a
         >
 
-        <form class="d-flex me-auto" role="search">
+        <form th:action="@{/movie/search}" method="get" class="d-flex me-auto" role="search">
             <input
                     class="form-control me-2"
                     type="search"
-                    placeholder="Tìm phim, rạp"
+                    placeholder="Tìm phim"
                     aria-label="Search"
+                    name="searchTerm"
             />
             <button class="btn btn-warning" type="submit">Tìm</button>
         </form>
@@ -26,7 +27,7 @@
             <li class="nav-item">
                 <a
                         class="nav-link active fw-bold d-flex flex-column align-items-center montserrat-bold"
-                        href="/"
+                        href="/movie"
                 >
                     <i class="bi bi-camera-reels-fill"></i> Phim</a
                 >
@@ -42,7 +43,7 @@
             <li class="nav-item">
                 <a
                         class="nav-link active fw-bold d-flex flex-column align-items-center montserrat-bold"
-                        href="/"
+                        href="/giftcard"
                 >
                     <i class="bi bi-gift-fill"></i> Quà tặng</a
                 >

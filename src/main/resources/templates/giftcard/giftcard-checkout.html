@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+
+<div class="container bg-secondary-subtle p-4">
+    <div class="row pb-5">
+        <div class="col-8">
+            <div class="montserrat-bold">Điểm thưởng</div>
+
+            <label for="initialBalance" class="form-label">Chọn giá trị</label>
+            <select class="form-select" id="initialBalance" name="initialBalance" onchange="updateCartPrice()">
+                <option value="100000">100.000 đ</option>
+                <option value="200000">200.000 đ</option>
+                <option value="300000">300.000 đ</option>
+                <option value="500000">500.000 đ</option>
+                <option value="1000000">1.000.000 đ</option>
+            </select>
+
+
+            <label for="email" class="form-label">Email người nhận: </label>
+            <input type="email" class="form-control" id="email">
+            <button type="button" class="btn btn-primary" onclick="searchUser()">Tìm người dùng</button>
+
+            <div th:if="${recipient != null}" class="mt-3">
+                <div class="alert alert-success">
+                    <div>Tên: <span th:text="${recipient.fullName}"></span></div>
+                    <div>Email: <span th:text="${recipient.email}"></span></div>
+                </div>
+            </div>
+
+            <div th:if="${recipient == null and param.recipientEmail != null}" class="mt-3">
+                <div class="alert alert-danger">
+                    Không tìm thấy người dùng với email này
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="col-4">
+            <div class="border p-3">
+                <div class="row mb-2">
+                    <div class="col-12 text-primary montserrat-bold">Thông tin thẻ quà tặng</div>
+                </div>
+                <div class="row">
+                    <img
+                            th:src="@{${giftCardImage.image}}"
+                    />
+
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-4 text-secondary">Giá trị:</div>
+                    <div id="cart-initialBalance" class="col-8">0 đ</div>
+                </div>
+                <div class="row" th:if="${recipient != null}">
+                    <div class="col-4 text-secondary">Người nhận:</div>
+                    <div class="col-8" th:text="${recipient.fullName}">Trần Thị B</div>
+                </div>
+                <div class="row" th:if="${recipient != null}">
+                    <div class="col-4 text-secondary">Email:</div>
+                    <div id="cart-email" class="col-8" th:text="${recipient.email}">tranthib@gmail.com</div>
+                </div>
+
+
+                <hr />
+                <div class="d-flex justify-content-between">
+                    <div class="text-primary montserrat-bold">Tổng tiền</div>
+                    <div id="cart-total" class="fw-bold text-warning">0 đ</div>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <div class="btn btn-secondary">Trở lại</div>
+                <form id="giftCardForm" method="POST" action="/giftcard/newgiftcard">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <input type="hidden" name="imageId" />
+                    <input type="hidden" name="recipientEmail" />
+                    <input type="hidden" name="initialBalance" />
+                    <a onclick="submitGiftCard()" class="btn btn-warning">Thanh toán</a>
+                </form>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</main>
+</body>
+<script>
+    function searchUser() {
+        const email = document.getElementById('email').value;
+        const urlParams = new URLSearchParams(window.location.search);
+        const imageId = urlParams.get('imageId');
+        window.location.href = `/giftcard/checkout?imageId=${imageId}&recipientEmail=${email}`;
+    }
+
+    function updateCartPrice() {
+        const select = document.getElementById('initialBalance');
+        const value = select.value;
+        const formattedValue = new Intl.NumberFormat('vi-VN').format(value) + ' đ';
+        document.getElementById('cart-initialBalance').textContent = formattedValue;
+        document.getElementById('cart-total').textContent = formattedValue;
+    }
+
+
+
+
+    function submitGiftCard() {
+        const form = document.getElementById('giftCardForm');
+        const urlParams = new URLSearchParams(window.location.search);
+
+        form.querySelector('[name="imageId"]').value = urlParams.get('imageId');
+        form.querySelector('[name="recipientEmail"]').value = document.getElementById('cart-email').textContent;
+        form.querySelector('[name="initialBalance"]').value = document.getElementById('initialBalance').value;
+
+        form.submit();
+    }
+
+
+</script>
+</html>

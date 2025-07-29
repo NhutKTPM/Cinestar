@@ -45,6 +45,9 @@ public class BillEntity {
     @OneToMany(mappedBy = "bill")
     private List<BillConcessionItemEntity> concessionItems;
 
+    @OneToMany
+    private List<GiftCardUsageEntity> giftCardUsages;
+
     private String paymentMethod;
 
     public Long getTotalTicket(){

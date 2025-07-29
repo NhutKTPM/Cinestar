@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
+
+<main>
+    <div class="container bg-secondary-subtle p-4">
+        <div class="row">
+            <div th:replace="~{fragments/admin-sidebar :: admin-sidebar}"></div>
+
+            <div class="col-10">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Hình ảnh</th>
+                        <th scope="col">Giá trị</th>
+                        <th scope="col">Giá trị còn lại</th>
+                        <th scope="col">Người mua</th>
+                        <th scope="col">Người nhận</th>
+                        <th scope="col">Ngày hết hạn</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="giftCard: ${giftCards}">
+                        <td th:text="${giftCard.giftCardId}">1</td>
+                        <td>
+                            <img
+                                th:src="@{${giftCard.giftCardImage.image}}"
+                                alt=""
+                                style="height:100px;"
+                            />
+                        </td>
+                        <td th:text="${giftCard.initialBalance}">1</td>
+                        <td th:text="${giftCard.currentBalance}">1</td>
+                        <td th:text="${giftCard.purchaser.email}">1</td>
+                        <td th:text="${giftCard.recipient.email}">1</td>
+                        <td th:text="${giftCard.expirationDate}">1</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</body>
+</html>

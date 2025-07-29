@@ -1,9 +1,12 @@
 package com.da3.MovieTicket.service;
 
 import com.da3.MovieTicket.entity.ConcessionEntity;
+import com.da3.MovieTicket.entity.GiftCardEntity;
+import com.da3.MovieTicket.entity.GiftCardUsageEntity;
 import com.da3.MovieTicket.entity.SeatEntity;
 import com.da3.MovieTicket.model.Cart;
 import com.da3.MovieTicket.model.CartConcessionItem;
+import com.da3.MovieTicket.model.CartGiftCardUsage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -56,6 +59,17 @@ public class CartService {
                         item.setQuantity(quantity);
                     }
                 });
+    }
+
+    public void addGiftCard(GiftCardEntity giftCard) {
+        CartGiftCardUsage usage = new CartGiftCardUsage();
+        usage.setGiftCard(giftCard);
+        if (giftCard.getCurrentBalance() <= cart.getTotal()) {
+            usage.setUsedAmount(giftCard.getCurrentBalance());
+        } else {
+            usage.setUsedAmount(cart.getTotal());
+        }
+        cart.getGiftCardUsages().add(usage);
     }
 
     public Cart getCart() {

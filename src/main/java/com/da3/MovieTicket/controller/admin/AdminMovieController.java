@@ -85,6 +85,7 @@ public class AdminMovieController {
         List<GenreEntity> genres = genreService.getAllGenres();
         model.addAttribute("genres", genres);
 
+        System.out.println(movie.getGenres().size());
 
         return "admin/admin-movie-detail";
     }
@@ -99,5 +100,12 @@ public class AdminMovieController {
         return "redirect:/admin/movie/" + newShowtime.getMovie().getMovieId();
     }
 
-
+    @PostMapping("/admin/movie/{id}/addGenre")
+    public String addGenreToMovie (@PathVariable("id") long movieId, @RequestParam(value = "genreId") Long genreId){
+        MovieEntity movie = movieService.getMovieById(movieId);
+        GenreEntity genre = genreService.getGenreById(genreId);
+        movie.getGenres().add(genre);
+        movieService.updateMovie(movie);
+        return "redirect:/admin/movie/" + movieId;
+    }
 }

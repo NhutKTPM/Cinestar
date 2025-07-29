@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+
+<body class="container">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+
+<div class="container bg-secondary-subtle p-4">
+    <h3>Kết quả tìm kiếm</h3>
+    <div class="row row-gap-4 mb-3 mt-3">
+        <div th:each="movie: ${movies}" class="col-3">
+            <div th:replace="~{fragments/movieCard :: movieCard(${movie})}"></div>
+        </div>
+    </div>
+
+</div>
+
+</main>
+
+
+</body>
+</html>

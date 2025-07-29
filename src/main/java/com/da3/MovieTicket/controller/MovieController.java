@@ -1,21 +1,16 @@
 package com.da3.MovieTicket.controller;
 
-import com.da3.MovieTicket.entity.CinemaEntity;
-import com.da3.MovieTicket.entity.MovieEntity;
-import com.da3.MovieTicket.entity.RegionEntity;
-import com.da3.MovieTicket.entity.ShowtimeEntity;
-import com.da3.MovieTicket.service.CinemaService;
-import com.da3.MovieTicket.service.MovieService;
-import com.da3.MovieTicket.service.ShowtimeService;
+import com.da3.MovieTicket.entity.*;
+import com.da3.MovieTicket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import com.da3.MovieTicket.service.RegionService;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,18 +20,47 @@ public class MovieController {
     private final ShowtimeService showtimeService;
     private final RegionService regionService;
     private final CinemaService cinemaService;
+    private final GenreService genreService;
 
 
     @Autowired
     public MovieController(MovieService movieService,
                            ShowtimeService showtimeService,
                            RegionService regionService,
-                           CinemaService cinemaService) {
+                           CinemaService cinemaService,
+                           GenreService genreService) {
         this.movieService = movieService;
         this.showtimeService = showtimeService;
         this.regionService = regionService;
         this.cinemaService = cinemaService;
+        this.genreService = genreService;
+    }
 
+    @GetMapping("/movie")
+    public String moviesPage(Model model,
+                             @RequestParam(value = "showingOrUpcoming", required = false) String showingOrUpcoming,
+                             @RequestParam(value = "genreId", required = false) Long genreId)
+    {
+        List<MovieEntity> movies = new ArrayList<>();
+
+        if (showingOrUpcoming != null) {
+            if (showingOrUpcoming.equals("showing")) {
+                movies = movieService.getCurrentlyShowingMovies();
+            } else {
+                movies = movieService.getUpcomingMovies();
+            }
+        }
+        else if (genreId != null) {
+            movies = movieService.getMoviesByGenre(genreId);
+        }
+        else {
+            movies = movieService.getCurrentlyShowingMovies();
+        }
+        model.addAttribute("movies", movies);
+        List<GenreEntity> allGenres = genreService.getAllGenres();
+        model.addAttribute("genres", allGenres);
+
+        return "movie/movies";
     }
 
     @GetMapping("/movie/{id}")
@@ -74,5 +98,17 @@ public class MovieController {
 
 
         return "movie/movie-detail";
+    }
+
+    @GetMapping("/movie/search")
+    public String searchMovie(Model model,
+                              @RequestParam(value = "searchTerm", required = false) String searchTerm
+                              ){
+        if (searchTerm == null || searchTerm.isEmpty()) {
+            return "redirect:/";
+        }
+        List<MovieEntity> movies = movieService.searchMovie(searchTerm);
+        model.addAttribute("movies", movies);
+        return "movie/search-result";
     }
 }

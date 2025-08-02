@@ -47,11 +47,25 @@ public class CartService {
                 item.getConcession().getConcessionId().equals(concession.getConcessionId()));
     }
 
-    public void updateConcessionQuantity(Long concessionId, int quantity) {
+//    public void updateConcessionQuantity(Long concessionId, int quantity) {
+//        cart.getConcessionItems().stream()
+//                .filter(item -> item.getConcession().getConcessionId().equals(concessionId))
+//                .findFirst()
+//                .ifPresent(item -> {
+//                    if (quantity <= 0) {
+//                        cart.getConcessionItems().remove(item);
+//                    } else {
+//                        item.setQuantity(quantity);
+//                    }
+//                });
+//    }
+
+    public void decreaseConcessionQuantityByOne(Long concessionId) {
         cart.getConcessionItems().stream()
                 .filter(item -> item.getConcession().getConcessionId().equals(concessionId))
                 .findFirst()
                 .ifPresent(item -> {
+                    int quantity = item.getQuantity() - 1;
                     if (quantity <= 0) {
                         cart.getConcessionItems().remove(item);
                     } else {

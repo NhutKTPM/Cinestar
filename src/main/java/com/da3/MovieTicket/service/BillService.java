@@ -1,6 +1,7 @@
 package com.da3.MovieTicket.service;
 
 import com.da3.MovieTicket.entity.BillEntity;
+import com.da3.MovieTicket.entity.ShowtimeEntity;
 import com.da3.MovieTicket.entity.UserEntity;
 import com.da3.MovieTicket.repository.BillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,9 @@ public class BillService {
 
     public List<BillEntity> getBillsByUser(UserEntity user){
         return billRepository.findAllByUserOrderByCreatedAtDesc(user);
+    }
+
+    public List<BillEntity> getBillsByShowtime(ShowtimeEntity showtime){
+        return billRepository.findAllByShowtime(showtime);
     }
 }

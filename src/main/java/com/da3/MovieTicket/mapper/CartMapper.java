@@ -41,7 +41,7 @@ public class CartMapper {
         itemDTO.setConcessionName(item.getConcession().getConcessionName());
         itemDTO.setQuantity(item.getQuantity());
         itemDTO.setTotalPrice(item.getConcession().getPrice() * item.getQuantity());
-        
+        itemDTO.setId(item.getConcession().getConcessionId());
         return itemDTO;
     }
 

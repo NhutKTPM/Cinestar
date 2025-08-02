@@ -59,6 +59,6 @@ public class GiftCardController {
         newGiftCard.setInitialBalance(initialBalance);
         newGiftCard.setCurrentBalance(initialBalance);
         giftCardService.createGiftCard(newGiftCard);
-        return "redirect:/";
+        return "redirect:/userprofile/giftcards/gifted";
     }
 }

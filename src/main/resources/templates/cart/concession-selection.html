@@ -19,7 +19,7 @@
                         <div class="card-body">
                             <h5 class="card-title montserrat-bold" th:text="${concession.concessionName}">Dragon Combo 1</h5>
                             <div class="card-text d-flex justify-content-between">
-                                <div th:text="${concession.price}">389.000 đ</div>
+                                <div th:text="${#numbers.formatDecimal(concession.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">389,000 đ</div>
                                 <a href="#" class="btn btn-warning"
                                    th:onclick="'addConcession(' + ${concession.concessionId} + ')'">Thêm</a>
                             </div>
@@ -35,7 +35,7 @@
             <div th:replace="~{fragments/cart :: cart(${cart})}"></div>
 
             <div class="d-flex justify-content-between mt-3">
-                <div class="btn btn-secondary">Trở lại</div>
+                <a th:href="@{/cart/{id}/seat(id=${showtime.showtimeId})}" class="btn btn-secondary">Trở lại</a>
                 <a th:href="@{/cart/{id}/checkoutPage(id=${showtime.showtimeId})}" class="btn btn-warning">Tiếp tục</a>
             </div>
         </div>
@@ -50,6 +50,30 @@
 </body>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        loadCartWhenPageFirstLoad();
+    });
+    // Add to concession-selection.html
+    function loadCartWhenPageFirstLoad() {
+        const token = document.querySelector("meta[name='_csrf']").getAttribute("content");
+        const header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+
+        fetch(`/cart/getCart`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              [header]: token
+          }
+        })
+        .then(response => response.json())
+        .then(cart => {
+            console.log(cart);
+            // Update cart display
+            updateCartDisplay(cart);
+        });
+    }
+
+
 
     // Add to concession-selection.html
     function addConcession(concessionId) {
@@ -70,44 +94,72 @@
             updateCartDisplay(cart);
         });
     }
-    
+
     function updateCartDisplay(cart) {
         // First update the seats display (reuse existing function)
         // updateCartDisplaySeats(cart);
-        
+
         // Find the "Bắp nước" section
         const concessionSection = document.getElementById('concession-items');
         if (!concessionSection) return;
-        
+
         // Clear existing concession items
         while (concessionSection.firstChild) {
             concessionSection.removeChild(concessionSection.firstChild);
         }
-        
-        
+
+
         // Add new concession items
         if (cart.concessionItems && cart.concessionItems.length > 0) {
             cart.concessionItems.forEach(item => {
                 const concessionDiv = document.createElement('div');
                 concessionDiv.className = 'd-flex justify-content-between';
-                
+
+                const leftSection = document.createElement('div');
+                leftSection.className = 'd-flex align-items-center gap-2';
+
+                const removeIcon = document.createElement('i');
+                removeIcon.className = 'bi bi-x-lg text-danger';
+                removeIcon.style.cursor = 'pointer';
+                removeIcon.onclick = function() {
+                    const token = document.querySelector("meta[name='_csrf']").getAttribute("content");
+                    const header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+
+                    fetch(`/cart/concessions/decrease/${item.id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            [header]: token
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(cart => {
+                        updateCartDisplay(cart);
+                    });
+                };
+
+
+
                 const nameDiv = document.createElement('div');
                 nameDiv.textContent = `${item.concessionName}${item.quantity > 1 ? ` x${item.quantity}` : ''}`;
-                
+
+                leftSection.appendChild(removeIcon);
+                leftSection.appendChild(nameDiv);
+
                 const priceDiv = document.createElement('div');
-                priceDiv.textContent = `${(item.totalPrice).toLocaleString('vi-VN')} đ`;
-                
-                concessionDiv.appendChild(nameDiv);
+                priceDiv.textContent = `${(item.totalPrice).toLocaleString('en-US')} đ`;
+
+                concessionDiv.appendChild(leftSection);
                 concessionDiv.appendChild(priceDiv);
-                
+
                 concessionSection.appendChild(concessionDiv);
             });
         }
-        
+
         // Update total price
         const totalElement = document.getElementById('total');
         if (totalElement) {
-            totalElement.textContent = `${cart.total.toLocaleString('vi-VN')} đ`;
+            totalElement.textContent = `${cart.total.toLocaleString('en-US')} đ`;
         }
     }
     

@@ -28,10 +28,11 @@
                             <span style="width: 1.5rem; height: 1.5rem" th:text="${row[0].rowLabel}"></span>
                             <button th:each="seat : ${row}"
                                     th:class="${'border border-2 rounded p-0 ' +
-                (seat.seatType.seatTypeId == 2 ? 'border-warning' :
-                (seat.seatType.seatTypeId == 3 ? 'border-danger' :
-                (seat.seatType.seatTypeId == 4 ? 'border-success' : 'border-primary')))}"
-
+                                    (boughtSeats.contains(seat) ? 'border-secondary-subtle bg-secondary' :
+                                    (seat.seatType.seatTypeId == 2 ? 'border-warning' :
+                                    (seat.seatType.seatTypeId == 3 ? 'border-danger' :
+                                    (seat.seatType.seatTypeId == 4 ? 'border-success' : 'border-primary'))))}"
+                                    th:disabled="${boughtSeats.contains(seat)}"
                                     style="width: 1.5rem; height: 1.5rem"
                                     th:data-seat-id="${seat.seatId}"
                                     th:text="${seat.seatNumber}">
@@ -81,7 +82,7 @@
 
             <div class="d-flex justify-content-between mt-3">
                 <div class="btn btn-secondary">Trở lại</div>
-                <a th:href="@{/cart/{id}/concession(id=${showtime.showtimeId})}" class="btn btn-warning">Tiếp tục</a>
+                <a id="continue-button" th:href="@{/cart/{id}/concession(id=${showtime.showtimeId})}" class="btn btn-warning disabled">Tiếp tục</a>
             </div>
 
         </div>
@@ -147,6 +148,15 @@
         totalTicketElement.textContent = `${cart.totalTicket.toLocaleString('vi-VN')} đ`;
         const totalElement = document.getElementById('total');
         totalElement.textContent = `${cart.total.toLocaleString('vi-VN')} đ`;
+
+        // Disable/enable the continue button based on seat selection
+        const continueButton = document.getElementById('continue-button');
+        if (cart.seats && cart.seats.trim() !== '') {
+            continueButton.classList.remove('disabled');
+        } else {
+            continueButton.classList.add('disabled');
+        }
+
     }
     
     

@@ -16,6 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class CartController {
@@ -45,14 +47,18 @@ public class CartController {
     @GetMapping("/cart/{id}/seat")
     public String showSeats(@PathVariable("id") long showtimeId, Model model) {
         ShowtimeEntity showtime = showtimeService.getShowtimeById(showtimeId);
-
-
-
         model.addAttribute("showtime", showtime);
 
         List<List<SeatEntity>> seatLayout = seatService.getSeatLayout(showtime.getRoom());
-
         model.addAttribute("seatLayout", seatLayout);
+
+        // Get bought seats for this showtime
+        List<BillEntity> bills = billService.getBillsByShowtime(showtime);
+        Set<SeatEntity> boughtSeats = bills.stream()
+                .flatMap(bill -> bill.getTickets().stream())
+                .map(TicketEntity::getSeat)
+                .collect(Collectors.toSet());
+        model.addAttribute("boughtSeats", boughtSeats);
 
         cartService.clearCart();
 
@@ -173,12 +179,21 @@ public class CartController {
         return ResponseEntity.ok(cartMapper.toDto(cartService.getCart()));
     }
 
-    @PostMapping("/cart/concessions/update/{concessionId}")
+//    @PostMapping("/cart/concessions/update/{concessionId}")
+//    @ResponseBody
+//    public ResponseEntity<?> updateConcessionQuantity(
+//            @PathVariable Long concessionId,
+//            @RequestParam int quantity) {
+//        cartService.updateConcessionQuantity(concessionId, quantity);
+//        return ResponseEntity.ok(cartMapper.toDto(cartService.getCart()));
+//    }
+
+    @PostMapping("/cart/concessions/decrease/{concessionId}")
     @ResponseBody
-    public ResponseEntity<?> updateConcessionQuantity(
-            @PathVariable Long concessionId,
-            @RequestParam int quantity) {
-        cartService.updateConcessionQuantity(concessionId, quantity);
+    public ResponseEntity<?> decreaseConcessionQuantity(
+            @PathVariable Long concessionId)
+    {
+        cartService.decreaseConcessionQuantityByOne(concessionId);
         return ResponseEntity.ok(cartMapper.toDto(cartService.getCart()));
     }
 

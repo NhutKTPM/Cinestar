@@ -4,6 +4,7 @@ import com.da3.MovieTicket.entity.UserEntity;
 import com.da3.MovieTicket.repository.UserRepository;
 import com.da3.MovieTicket.security.CustomUserDetails;
 import com.da3.MovieTicket.service.BillService;
+import com.da3.MovieTicket.service.GiftCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,6 +19,8 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private BillService billService;
+    @Autowired
+    private GiftCardService giftCardService;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -47,6 +50,18 @@ public class UserController {
         model.addAttribute("user", currentUser.getUser());
         model.addAttribute("bills", billService.getBillsByUser(currentUser.getUser()));
         return "user/user-profile";
+    }
+
+    @GetMapping("/userprofile/giftcards/received")
+    String giftCardReceivedPage(Model model, @AuthenticationPrincipal CustomUserDetails currentUser){
+        model.addAttribute("giftCards", giftCardService.getAllGiftCardsOfRecipient(currentUser.getId()));
+        return "user/giftcards-received";
+    }
+
+    @GetMapping("/userprofile/giftcards/gifted")
+    String giftCardGiftedPage(Model model, @AuthenticationPrincipal CustomUserDetails currentUser){
+        model.addAttribute("giftCards", giftCardService.getAllGiftCardsOfPurchaser(currentUser.getId()));
+        return "user/giftcards-gifted";
     }
 
 }

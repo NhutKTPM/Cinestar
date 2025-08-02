@@ -81,7 +81,10 @@
             <div class="col-12 text-primary montserrat-bold">Thẻ quà tặng</div>
         </div>
         <div id="giftcards">
-
+            <div th:each="usage : ${cart.giftCardUsages}" class="d-flex justify-content-between">
+                <div th:text="${usage.giftCardCode}"></div>
+                <div th:text="'-' + ${#numbers.formatDecimal(usage.usedAmount, 0, 'COMMA', 0, 'POINT')} + ' đ'"></div>
+            </div>
         </div>
 
         <hr />
@@ -95,67 +98,4 @@
 
 
 </body>
-
-<script>
-
-    // Add to concession-selection.html
-    function addConcession(concessionId) {
-        const token = document.querySelector("meta[name='_csrf']").getAttribute("content");
-        const header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
-
-        fetch(`/cart/concessions/add/${concessionId}`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              [header]: token
-          }
-        })
-        .then(response => response.json())
-        .then(cart => {
-            console.log(cart);
-            // Update cart display
-            updateCartDisplay(cart);
-        });
-    }
-
-    function updateCartDisplay(cart) {
-        // First update the seats display (reuse existing function)
-        // updateCartDisplaySeats(cart);
-
-        // Find the "Bắp nước" section
-        const concessionSection = document.getElementById('concession-items');
-        if (!concessionSection) return;
-
-        // Clear existing concession items
-        while (concessionSection.firstChild) {
-            concessionSection.removeChild(concessionSection.firstChild);
-        }
-
-
-        // Add new concession items
-        if (cart.concessionItems && cart.concessionItems.length > 0) {
-            cart.concessionItems.forEach(item => {
-                const concessionDiv = document.createElement('div');
-                concessionDiv.className = 'd-flex justify-content-between';
-
-                const nameDiv = document.createElement('div');
-                nameDiv.textContent = `${item.concessionName}${item.quantity > 1 ? ` x${item.quantity}` : ''}`;
-
-                const priceDiv = document.createElement('div');
-                priceDiv.textContent = `${(item.totalPrice).toLocaleString('vi-VN')} đ`;
-
-                concessionDiv.appendChild(nameDiv);
-                concessionDiv.appendChild(priceDiv);
-
-                concessionSection.appendChild(concessionDiv);
-            });
-        }
-
-        // Update total price
-        const totalElement = document.getElementById('total');
-        if (totalElement) {
-            totalElement.textContent = `${cart.total.toLocaleString('vi-VN')} đ`;
-        }
-    }
-</script>
 </html>

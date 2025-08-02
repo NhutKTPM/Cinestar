@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+
+
+    <div class="container bg-secondary-subtle p-4">
+        <div class="row">
+
+
+            <div class="col-3">
+
+
+                <div th:replace="~{fragments/user-sidebar :: user-sidebar}"></div>
+
+
+            </div>
+
+            <div class="col-9">
+                <h5 class="montserrat-bold">Thẻ quà tặng đã nhận</h5>
+
+                <div th:each="giftCard: ${giftCards}" class="card mb-3">
+                    <div class="card-body d-flex align-items-center">
+                        <img th:if="${giftCard.giftCardImage}"
+                             th:src="@{${giftCard.giftCardImage.image}}"
+                             class="gift-card-image me-3"
+                             style="width: 100px; height: 60px; object-fit: cover;">
+                        <div>
+                            <h6 class="card-title mb-1">Thẻ quà tặng #[[${giftCard.giftCardCode}]]</h6>
+                            <p class="card-text mb-1">Số dư ban đầu: [[${#numbers.formatDecimal(giftCard.initialBalance, 0, 'COMMA', 0, 'POINT')}]] ₫</p>
+                            <p class="card-text mb-1">Số dư hiện tại: [[${#numbers.formatDecimal(giftCard.currentBalance, 0, 'COMMA', 0, 'POINT')}]] ₫</p>
+                            <p class="card-text mb-0">Người tặng: [[${giftCard.purchaser.fullName}]]</p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+</body>
+</html>

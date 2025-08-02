@@ -2,9 +2,11 @@ package com.da3.MovieTicket.mapper;
 
 import com.da3.MovieTicket.dto.CartConcessionItemDTO;
 import com.da3.MovieTicket.dto.CartDTO;
+import com.da3.MovieTicket.dto.GiftCardUsageDTO;
 import com.da3.MovieTicket.entity.*;
 import com.da3.MovieTicket.model.Cart;
 import com.da3.MovieTicket.model.CartConcessionItem;
+import com.da3.MovieTicket.model.CartGiftCardUsage;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -27,6 +29,9 @@ public class CartMapper {
         cartDTO.setConcessionItems(cart.getConcessionItems().stream()
                 .map(this::toConcessionDto)
                 .collect(Collectors.toList()));
+        cartDTO.setGiftCardUsages(cart.getGiftCardUsages().stream()
+                .map(this::toBillGiftCardUsageDto)
+                .collect(Collectors.toList()));
         cartDTO.setTotal(cart.getTotal());
         return cartDTO;
     }
@@ -38,6 +43,14 @@ public class CartMapper {
         itemDTO.setTotalPrice(item.getConcession().getPrice() * item.getQuantity());
         
         return itemDTO;
+    }
+
+    public GiftCardUsageDTO toBillGiftCardUsageDto(CartGiftCardUsage giftCardUsage){
+        GiftCardUsageDTO usageDTO = new GiftCardUsageDTO();
+        usageDTO.setGiftCardId(giftCardUsage.getGiftCard().getGiftCardId());
+        usageDTO.setGiftCardCode(giftCardUsage.getGiftCard().getGiftCardCode());
+        usageDTO.setUsedAmount(giftCardUsage.getUsedAmount());
+        return usageDTO;
     }
 
 
@@ -60,23 +73,19 @@ public class CartMapper {
                 .collect(Collectors.joining(", ")));
 
 
-        Long totalTicket = 0L;
-        // Add seats total
-        for (TicketEntity ticket : bill.getTickets()) {
-            totalTicket = totalTicket + ticket.getSeat().getSeatType().getPrice();
-        }
-        cartDTO.setTotalTicket(totalTicket);
+        cartDTO.setTotalTicket(bill.getTotalTicket());
 
         // Map concession items
         cartDTO.setConcessionItems(bill.getConcessionItems().stream()
                 .map(this::toBillConcessionDto)
                 .collect(Collectors.toList()));
 
-        // Calculate total (you might want to adjust this based on your business logic)
-        Long totalConcession = bill.getConcessionItems().stream()
-                .mapToLong(item -> item.getConcession().getPrice() * item.getQuantity())
-                .sum();
-        cartDTO.setTotal(totalConcession + totalTicket);
+        // Map gift card usage
+        cartDTO.setGiftCardUsages(bill.getGiftCardUsages().stream()
+                .map(this::toBillGiftCardUsageDto)
+                .collect(Collectors.toList()));
+
+        cartDTO.setTotal(bill.getTotal());
 
         return cartDTO;
     }
@@ -87,6 +96,14 @@ public class CartMapper {
         itemDTO.setQuantity(item.getQuantity());
         itemDTO.setTotalPrice(item.getConcession().getPrice() * item.getQuantity());
         return itemDTO;
+    }
+
+    private GiftCardUsageDTO toBillGiftCardUsageDto(BillGiftCardUsageEntity giftCardUsage){
+        GiftCardUsageDTO usageDTO = new GiftCardUsageDTO();
+        usageDTO.setGiftCardId(giftCardUsage.getGiftCard().getGiftCardId());
+        usageDTO.setGiftCardCode(giftCardUsage.getGiftCard().getGiftCardCode());
+        usageDTO.setUsedAmount(giftCardUsage.getUsedAmount());
+        return usageDTO;
     }
 
 }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
+
+<main>
+    <div class="container bg-secondary-subtle p-4">
+        <div class="row">
+            <div th:replace="~{fragments/admin-sidebar :: admin-sidebar}"></div>
+
+            <div class="col-10">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Hình ảnh</th>
+                        <th scope="col">Chức năng</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="banner: ${banners}">
+                        <td th:text="${banner.id}">1</td>
+                        <td>
+                            <img
+                                th:src="@{${banner.banner}}"
+                                alt=""
+                                style="height:100px;"
+                            />
+                        </td>
+                        <td>
+                            <form th:action="@{/admin/banner/{id}/disable(id=${banner.id})}" method="post">
+                                <button type="submit"
+                                        th:class="${banner.enabled} ? 'btn btn-danger' : 'btn btn-success'"
+                                        th:text="${banner.enabled} ? 'Ẩn' : 'Hiện'">
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h2>Thêm banner</h2>
+                <form th:action="@{/admin/banner/addBanner}" method="post" enctype="multipart/form-data" th:object="${newBanner}">
+                    <div class="mb-3">
+
+                        <label for="imageFile" class="form-label">Poster</label>
+                        <input type="file" name="imageFile" accept="image/*" class="form-control" id="imageFile" required>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</body>
+</html>

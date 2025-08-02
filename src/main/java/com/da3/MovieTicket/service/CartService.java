@@ -2,7 +2,6 @@ package com.da3.MovieTicket.service;
 
 import com.da3.MovieTicket.entity.ConcessionEntity;
 import com.da3.MovieTicket.entity.GiftCardEntity;
-import com.da3.MovieTicket.entity.GiftCardUsageEntity;
 import com.da3.MovieTicket.entity.SeatEntity;
 import com.da3.MovieTicket.model.Cart;
 import com.da3.MovieTicket.model.CartConcessionItem;

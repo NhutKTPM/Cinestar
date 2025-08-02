@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class GiftCardUsageDTO {
-    private String concessionName;
     private Long giftCardId;
     private String giftCardCode;
     private Long usedAmount;

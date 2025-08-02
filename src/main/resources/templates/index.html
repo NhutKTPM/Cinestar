@@ -12,48 +12,23 @@
             class="carousel slide pt-4 bg-secondary-subtle"
     >
         <div class="carousel-indicators" data-bs-theme="light">
-            <button
+            <button th:each="banner, iterStat: ${banners}"
                     type="button"
                     data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to="0"
-                    class="active"
-                    aria-current="true"
-                    aria-label="Slide 1"
-            ></button>
-            <button
-                    type="button"
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to="1"
-                    aria-label="Slide 2"
-            ></button>
-            <button
-                    type="button"
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to="2"
-                    aria-label="Slide 3"
+                    th:data-bs-slide-to="${iterStat.index}"
+                    th:class="${iterStat.first} ? 'active' : ''"
+                    th:aria-current="${iterStat.first}"
+                    th:aria-label="'Slide ' + ${iterStat.count}"
             ></button>
         </div>
         <div class="carousel-inner">
-            <div class="carousel-item active">
+            <div th:each="banner, iterStat: ${banners}"
+                 th:class="${iterStat.first} ? 'carousel-item active' : 'carousel-item'">
                 <img
-                        th:src="@{img/carousel/ballerina-2048_1748252066486.jpg}"
-                        class="d-block w-100 h-100"
-                        alt="..."
-                />
-            </div>
-            <div class="carousel-item">
-                <img
-                        th:src="@{img/carousel/mua-lua-2048_1747295237842.jpg}"
-                        class="d-block w-100 h-100"
-                        alt="..."
-                />
-            </div>
-            <div class="carousel-item">
-                <img
-                        th:src="@{img/carousel/hdg_payoff_980x448_1.jpg}"
-                        class="d-block w-100 h-100"
-                        alt="..."
-                />
+                            th:src="@{${banner.banner}}"
+                            class="d-block w-100 h-100"
+                            alt="..."
+                    />
             </div>
         </div>
         <button

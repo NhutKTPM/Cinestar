@@ -5,7 +5,6 @@ import com.da3.MovieTicket.repository.GiftCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -42,8 +41,17 @@ public class GiftCardService {
         return giftCardRepository.findByRecipientUserId(recipientId);
     }
 
+    public List<GiftCardEntity> getAllGiftCardsOfRecipientCurrentBalanceGreateThanZero(Long recipientId){
+        return giftCardRepository.findByRecipientUserIdAndCurrentBalanceGreaterThan(recipientId, 0L);
+    }
+
     public List<GiftCardEntity> getAllGiftCardsOfPurchaser(Long purchaserId){
         return giftCardRepository.findByPurchaserUserId(purchaserId);
+    }
+
+    public void useGiftCard(GiftCardEntity giftCard, Long amountUsing){
+        giftCard.setCurrentBalance(giftCard.getCurrentBalance() - amountUsing);
+        giftCardRepository.save(giftCard);
     }
 
 }

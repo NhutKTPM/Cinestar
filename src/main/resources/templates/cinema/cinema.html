@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+
+<body class="container">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+
+<div class="container bg-secondary-subtle p-4">
+    Danh sách rạp chiếu
+
+    <div>Chọn khu vực</div>
+    <div class="col-4 mb-3">
+        <select id="regionSelect" class="form-select" aria-label="Region select">
+            <th:block th:each="region : ${regions}">
+                <option th:value="${region.regionId}" th:text="${region.regionName}"
+                        th:selected="${region.regionId == regionId}"></option>
+            </th:block>
+        </select>
+    </div>
+
+    <div class="row row-gap-4 mb-5">
+        <div class="col-4" th:each="cinema: ${cinemas}">
+            <div class="card"
+                 style="cursor: pointer;"
+                 th:onclick="selectCinema([[${cinema.cinemaId}]])"
+            >
+                <div class="card-body">
+                    <h5 class="card-title montserrat-bold"
+                        th:text="${cinema.cinemaName}"
+                    >
+                        Rạp Cinestar Vincom Xuân Khánh
+                    </h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary mt-2" th:text="${cinema.address}">
+                        209 Đ. 30 Tháng 4, Xuân Khánh, Ninh Kiều, Cần Thơ
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${not #lists.isEmpty(showDates)}" class="d-flex column-gap-2 mb-3">
+        <div th:each="showDate : ${showDates}"
+             th:data-date="${#temporals.format(showDate, 'yyyy-MM-dd')}"
+             class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center show-date"
+             style="width: 4rem; cursor: pointer;">
+            <div class="montserrat-bold" th:text="${#temporals.format(showDate, 'E')}">T7</div>
+            <div th:text="${#temporals.format(showDate, 'dd/MM')}">14/06</div>
+        </div>
+    </div>
+
+</div>
+
+</main>
+
+
+</body>
+<script>
+    document.getElementById('regionSelect').addEventListener('change', function() {
+        const selectedRegionId = this.value;
+        window.location.href = `/cinema?regionId=${selectedRegionId}`;
+    });
+
+    function selectCinema(cinemaId) {
+        const currentUrl = new URL(window.location.href);
+        const regionId = currentUrl.searchParams.get('regionId');
+
+        let url = '/cinema?cinemaId=' + cinemaId;
+        if (regionId) {
+            url += '&regionId=' + regionId;
+        }
+
+        window.location.href = url;
+    }
+
+</script>
+</html>

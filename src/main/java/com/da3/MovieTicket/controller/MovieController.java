@@ -88,7 +88,7 @@ public class MovieController {
         RegionEntity region = null;
         if (cinemaId != null) { cinema = cinemaService.getCinemaById(cinemaId);}
         if (regionId != null) { region = regionService.getRegionById(regionId);}
-        Map<String, List<ShowtimeEntity>> showtimesByCinema = showtimeService.getShowtimesGroupedByCinema(date, cinema, region);
+        Map<String, List<ShowtimeEntity>> showtimesByCinema = showtimeService.getShowtimesGroupedByCinema(movie, date, cinema, region);
         model.addAttribute("showtimesByCinema", showtimesByCinema);
 
 

@@ -120,7 +120,76 @@
 
 </main>
 </body>
-<script>
 
+<script>
+    function useGiftCard(giftCardId) {
+        const token = document.querySelector("meta[name='_csrf']").getAttribute("content");
+        const header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+
+        fetch(`/cart/giftcards/use/${giftCardId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [header]: token
+            }
+        })
+        .then(response => response.json())
+        .then(cart => {
+            console.log(cart);
+            // Update cart display
+            updateCartDisplay(cart);
+        });
+    }
+
+    // Add to updateCartDisplay function to handle gift cards section
+    function updateCartDisplay(cart) {
+        // Previous concession items code remains the same...
+
+        // Update gift cards section
+        const giftCardsSection = document.getElementById('giftcards');
+        if (giftCardsSection) {
+            // Clear existing gift cards
+            while (giftCardsSection.firstChild) {
+                giftCardsSection.removeChild(giftCardsSection.firstChild);
+            }
+
+            // Add gift card items if present
+            if (cart.giftCardUsages && cart.giftCardUsages.length > 0) {
+                cart.giftCardUsages.forEach(giftCard => {
+                    const giftCardDiv = document.createElement('div');
+                    giftCardDiv.className = 'd-flex justify-content-between';
+
+                    const nameDiv = document.createElement('div');
+                    nameDiv.textContent = `#${giftCard.giftCardCode}`;
+
+                    const amountDiv = document.createElement('div');
+                    amountDiv.textContent = `-${giftCard.usedAmount.toLocaleString('vi-VN')} đ`;
+
+                    giftCardDiv.appendChild(nameDiv);
+                    giftCardDiv.appendChild(amountDiv);
+
+                    giftCardsSection.appendChild(giftCardDiv);
+                });
+            }
+        }
+
+        // Update total price
+        const totalElement = document.getElementById('total');
+        if (totalElement) {
+            totalElement.textContent = `${cart.total.toLocaleString('vi-VN')} đ`;
+        }
+    }
+
+    // Add event listeners to gift card checkboxes
+    document.addEventListener('DOMContentLoaded', function() {
+        const giftCardCheckboxes = document.querySelectorAll('input[type="checkbox"][id^="giftCard"]');
+        giftCardCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    useGiftCard(this.value);
+                }
+            });
+        });
+    });
 </script>
 </html>

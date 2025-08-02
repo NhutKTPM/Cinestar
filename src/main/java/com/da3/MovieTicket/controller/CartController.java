@@ -3,6 +3,7 @@ package com.da3.MovieTicket.controller;
 import com.da3.MovieTicket.entity.*;
 import com.da3.MovieTicket.mapper.CartMapper;
 import com.da3.MovieTicket.model.CartConcessionItem;
+import com.da3.MovieTicket.model.CartGiftCardUsage;
 import com.da3.MovieTicket.security.CustomUserDetails;
 import com.da3.MovieTicket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,8 @@ public class CartController {
     private CartMapper cartMapper;
     @Autowired
     private GiftCardService giftCardService;
+    @Autowired
+    private BillGiftCardUsageService billGiftCardUsageService;
 
 
 
@@ -87,7 +90,7 @@ public class CartController {
 
         model.addAttribute("cart", cartMapper.toDto(cartService.getCart()));
 
-        model.addAttribute("giftCards", giftCardService.getAllGiftCardsOfRecipient(currentUser.getId()));
+        model.addAttribute("giftCards", giftCardService.getAllGiftCardsOfRecipientCurrentBalanceGreateThanZero(currentUser.getId()));
 
         return "cart/checkout";
     }
@@ -118,6 +121,16 @@ public class CartController {
             billConcessionItemItem.setConcession(cartItem.getConcession());
             billConcessionItemItem.setQuantity(cartItem.getQuantity());
             billConcessionItemService.createBillConcessionItem(billConcessionItemItem);
+        }
+
+        // Create gift card usage entity
+        for (CartGiftCardUsage cartItem : cartService.getCart().getGiftCardUsages()) {
+            BillGiftCardUsageEntity billGiftCardUsageItem = new BillGiftCardUsageEntity();
+            billGiftCardUsageItem.setBill(savedBill);
+            billGiftCardUsageItem.setGiftCard(cartItem.getGiftCard());
+            billGiftCardUsageItem.setUsedAmount(cartItem.getUsedAmount());
+            giftCardService.useGiftCard(cartItem.getGiftCard(), cartItem.getUsedAmount());
+            billGiftCardUsageService.createBillGiftCardUsage(billGiftCardUsageItem);
         }
 
         // Clear the cart after successful checkout

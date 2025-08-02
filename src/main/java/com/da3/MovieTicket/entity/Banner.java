@@ -1,20 +1,18 @@
 package com.da3.MovieTicket.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "giftCardUsage")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GiftCardUsageEntity {
+public class Banner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,11 +27,5 @@ public class GiftCardUsageEntity {
 
     private boolean enabled = true;
 
-    private Long usedAmount;
-
-    @ManyToOne
-    private GiftCardEntity giftCard;  // the gift card used
-
-    @ManyToOne
-    private BillEntity bill; // the bill that the gift card is used for
+    private String banner;
 }

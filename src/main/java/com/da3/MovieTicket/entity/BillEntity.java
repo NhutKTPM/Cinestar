@@ -1,6 +1,5 @@
 package com.da3.MovieTicket.entity;
 
-import com.da3.MovieTicket.model.CartConcessionItem;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -46,7 +45,8 @@ public class BillEntity {
     private List<BillConcessionItemEntity> concessionItems;
 
     @OneToMany
-    private List<GiftCardUsageEntity> giftCardUsages;
+    @JoinColumn(name = "bill_bill_id")
+    private List<BillGiftCardUsageEntity> giftCardUsages;
 
     private String paymentMethod;
 
@@ -59,6 +59,15 @@ public class BillEntity {
         return total;
     }
 
+    public Long getTotalConcessions(){
+        Long totalConcession = 0L;
+        for (BillConcessionItemEntity item : concessionItems) {
+            totalConcession = totalConcession + (item.getConcession().getPrice()
+                    * (long) item.getQuantity());
+        }
+        return totalConcession;
+    }
+
     public Long getTotal() {
         Long total = 0L;
         // Add seats total
@@ -69,6 +78,10 @@ public class BillEntity {
         for (BillConcessionItemEntity item : concessionItems) {
             total = total + (item.getConcession().getPrice()
                     * (long) item.getQuantity());
+        }
+        // Subtract gift cards
+        for (BillGiftCardUsageEntity usage : giftCardUsages) {
+            total = total - usage.getUsedAmount();
         }
         return total;
     }

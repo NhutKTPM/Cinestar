@@ -85,6 +85,11 @@ public class CartService {
         cart.getGiftCardUsages().add(usage);
     }
 
+    public void removeGiftCard(GiftCardEntity giftCard) {
+        cart.getGiftCardUsages().removeIf(usage ->
+                usage.getGiftCard().getGiftCardId().equals(giftCard.getGiftCardId()));
+    }
+
     public Cart getCart() {
         return cart;
     }

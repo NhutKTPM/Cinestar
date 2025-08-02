@@ -122,11 +122,49 @@
 </body>
 
 <script>
+    // Check gift card checkboxes for cards already in cart
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/cart/getCart')
+            .then(response => response.json())
+            .then(cart => {
+                if (cart.giftCardUsages && cart.giftCardUsages.length > 0) {
+                    cart.giftCardUsages.forEach(usage => {
+                        const checkbox = document.getElementById('giftCard' + usage.giftCardId);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    });
+                }
+            });
+    });
+
+
+
     function useGiftCard(giftCardId) {
         const token = document.querySelector("meta[name='_csrf']").getAttribute("content");
         const header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
 
         fetch(`/cart/giftcards/use/${giftCardId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [header]: token
+            }
+        })
+        .then(response => response.json())
+        .then(cart => {
+            console.log(cart);
+            // Update cart display
+            updateCartDisplay(cart);
+        });
+    }
+
+
+    function removeGiftCard(giftCardId) {
+        const token = document.querySelector("meta[name='_csrf']").getAttribute("content");
+        const header = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+
+        fetch(`/cart/giftcards/remove/${giftCardId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -187,6 +225,8 @@
             checkbox.addEventListener('change', function() {
                 if (this.checked) {
                     useGiftCard(this.value);
+                } else {
+                    removeGiftCard(this.value);
                 }
             });
         });

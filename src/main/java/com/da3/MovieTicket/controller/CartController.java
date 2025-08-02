@@ -204,4 +204,11 @@ public class CartController {
         cartService.addGiftCard(giftCardService.getGiftCardById(giftCardId));
         return ResponseEntity.ok(cartMapper.toDto(cartService.getCart()));
     }
+
+    @PostMapping("/cart/giftcards/remove/{giftCardId}")
+    @ResponseBody
+    public ResponseEntity<?> removeGiftCard(@PathVariable Long giftCardId){
+        cartService.removeGiftCard(giftCardService.getGiftCardById(giftCardId));
+        return ResponseEntity.ok(cartMapper.toDto(cartService.getCart()));
+    }
 }

@@ -13,16 +13,24 @@
             <span th:text="${cinema.key}"> Rạp Cinestar Vincom Xuân Khánh </span>
             &nbsp;<i class="bi bi-heart"></i>
         </h5>
+        <!-- Get first showtime from any room type to access cinema address -->
         <h6 class="card-subtitle mb-2 text-body-secondary"
-            th:text="${cinema.value[0].room.cinema.address}">
+            th:with="firstShowtime=${cinema.value.values().iterator().next().get(0)}"
+            th:text="${firstShowtime.room.cinema.address}">
         209 Đ. 30 Tháng 4, Xuân Khánh, Ninh Kiều, Cần Thơ
         </h6>
-        <div class="d-flex column-gap-2 mb-2">
-            <th:block th:each="showtime : ${cinema.value}">
-                    <a th:href="@{/cart/{id}/seat(id=${showtime.showtimeId})}" class="btn btn-warning fw-bold" style="width: 5rem"
-                            th:text="${#temporals.format(showtime.startingTime, 'HH:mm')}">
-                    </a>
-            </th:block>
+        <div th:each="roomType : ${cinema.value}">
+            <div class="mb-2">
+                <strong th:text="${roomType.key}">Rạp 2D</strong>
+            </div>
+            <div class="d-flex column-gap-2 mb-2">
+                <th:block th:each="showtime : ${roomType.value}">
+                        <a th:href="@{/cart/{id}/seat(id=${showtime.showtimeId})}" class="btn btn-warning fw-bold" style="width: 5rem"
+                                th:text="${#temporals.format(showtime.startingTime, 'HH:mm')}">
+                        </a>
+                </th:block>
+            </div>
+            <hr th:if="${!roomType.key.equals(cinema.value.keySet().toArray()[cinema.value.size() - 1])}">
         </div>
     </div>
 </div>

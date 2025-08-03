@@ -51,7 +51,7 @@ public class ShowtimeService {
         return showtimeRepository.findDistinctShowDatesByCinema(cinema);
     }
 
-    public Map<String, List<ShowtimeEntity>> getShowtimesGroupedByCinema(MovieEntity movie, LocalDate date, CinemaEntity cinema, RegionEntity region) {
+    public Map<String, Map<String, List<ShowtimeEntity>>> getShowtimesGroupedByCinema(MovieEntity movie, LocalDate date, CinemaEntity cinema, RegionEntity region) {
         List<ShowtimeEntity> showtimes;
         if (cinema != null) {showtimes = showtimeRepository.findByShowDateAndCinema(movie, date, cinema);}
         else {
@@ -64,7 +64,10 @@ public class ShowtimeService {
 
         return showtimes.stream()
                 .collect(Collectors.groupingBy(
-                        showtime -> showtime.getRoom().getCinema().getCinemaName()
+                        showtime -> showtime.getRoom().getCinema().getCinemaName(),
+                        Collectors.groupingBy(
+                                showtime -> showtime.getRoom().getRoomType().getRoomTypeName()
+                        )
                 ));
     }
 }

@@ -90,8 +90,6 @@ public class CartController {
                                    @AuthenticationPrincipal CustomUserDetails currentUser) {
         ShowtimeEntity showtime = showtimeService.getShowtimeById(showtimeId);
 
-
-
         model.addAttribute("showtime", showtime);
 
         model.addAttribute("cart", cartMapper.toDto(cartService.getCart()));

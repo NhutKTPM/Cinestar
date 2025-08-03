@@ -47,7 +47,7 @@
         </div>
         <div class="row">
             <div class="col-4 text-secondary">Giờ chiếu:</div>
-            <div class="col-8" th:text="${#temporals.format(cart.startingTime, 'HH:mm')}">17:50</div>
+            <div class="col-8" th:text="${#temporals.format(cart.startingTime, 'HH:mm')} + ' - ' + ${#temporals.format(cart.endingTime, 'HH:mm')}">17:50</div>
         </div>
         <div class="row">
             <div class="col-4 text-secondary">Rạp chiếu:</div>

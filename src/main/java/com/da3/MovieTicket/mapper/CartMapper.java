@@ -19,6 +19,7 @@ public class CartMapper {
         cartDTO.setMovieName(cart.getShowtime().getMovie().getMovieName());
         cartDTO.setRoomType(cart.getShowtime().getRoom().getRoomType().getRoomTypeName());
         cartDTO.setStartingTime(cart.getShowtime().getStartingTime());
+        cartDTO.setEndingTime(cart.getShowtime().getStartingTime().plusMinutes(cart.getShowtime().getMovie().getLength()));
         cartDTO.setCinema(cart.getShowtime().getRoom().getCinema().getCinemaName());
         cartDTO.setRoom(cart.getShowtime().getRoom().getRoomName());
         cartDTO.setSeats(cart.getSelectedSeats().stream()
@@ -63,6 +64,8 @@ public class CartMapper {
         cartDTO.setMovieName(showtime.getMovie().getMovieName());
         cartDTO.setRoomType(showtime.getRoom().getRoomType().getRoomTypeName());
         cartDTO.setStartingTime(showtime.getStartingTime());
+        cartDTO.setEndingTime(bill.getShowtime().getStartingTime().plusMinutes(bill.getShowtime().getMovie().getLength()));
+        cartDTO.setEndingTime(showtime.getStartingTime().plusMinutes(showtime.getMovie().getLength()));
         cartDTO.setCinema(showtime.getRoom().getCinema().getCinemaName());
         cartDTO.setRoom(showtime.getRoom().getRoomName());
 

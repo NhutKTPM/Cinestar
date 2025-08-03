@@ -12,6 +12,7 @@ public class CartDTO {
     private String movieName;
     private String roomType;
     private LocalDateTime startingTime;
+    private LocalDateTime endingTime;
     private String cinema;
     private String room;
     private String seats;

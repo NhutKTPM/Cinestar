@@ -86,8 +86,23 @@ public class CartService {
     }
 
     public void removeGiftCard(GiftCardEntity giftCard) {
+        // Check if the total started with zero
+        boolean totalStartedWithZero = cart.getTotal() == 0;
+        
         cart.getGiftCardUsages().removeIf(usage ->
                 usage.getGiftCard().getGiftCardId().equals(giftCard.getGiftCardId()));
+        
+        // If the remaining gift cards in the cart still have unused balance, use them
+        if (totalStartedWithZero) {
+            for (CartGiftCardUsage usage : cart.getGiftCardUsages()) {
+                if (usage.getGiftCard().getCurrentBalance() - usage.getUsedAmount() <= cart.getTotal()) {
+                    usage.setUsedAmount(usage.getGiftCard().getCurrentBalance());
+                } else {
+                    usage.setUsedAmount(usage.getUsedAmount() + cart.getTotal());
+                }
+                if (cart.getTotal() == 0) { break; }
+            }
+        }
     }
 
     public Cart getCart() {

@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/common :: common-head"></head>
+<style>
+    .cant-be-selected {
+        background-color: #41464b;
+    }
+</style>
 <body class="container">
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
@@ -28,7 +33,7 @@
                             <span style="width: 1.5rem; height: 1.5rem" th:text="${row[0].rowLabel}"></span>
                             <button th:each="seat : ${row}"
                                     th:class="${'border border-2 rounded p-0 ' +
-                                    (boughtSeats.contains(seat) ? 'border-secondary-subtle bg-secondary' :
+                                    (boughtSeats.contains(seat) ? 'border-secondary-subtle cant-be-selected' :
                                     (seat.seatType.seatTypeId == 2 ? 'border-warning' :
                                     (seat.seatType.seatTypeId == 3 ? 'border-danger' :
                                     (seat.seatType.seatTypeId == 4 ? 'border-success' : 'border-primary'))))}"

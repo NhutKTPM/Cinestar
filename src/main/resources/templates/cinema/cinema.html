@@ -22,7 +22,7 @@
 
     <div class="row row-gap-4 mb-5">
         <div class="col-4" th:each="cinema: ${cinemas}">
-            <div class="card"
+            <div th:class="${cinema.cinemaId==cinemaId} ? 'card border-primary-subtle bg-primary-subtle' : 'card'"
                  style="cursor: pointer;"
                  th:onclick="selectCinema([[${cinema.cinemaId}]])"
             >
@@ -50,6 +50,48 @@
         </div>
     </div>
 
+
+
+    <!-- Showtimes by movies -->
+    <div th:if="${#maps.isEmpty(showtimes)}" class="mb-3">
+        Không tìm thấy suất chiếu
+    </div>
+    <div th:if="${not #maps.isEmpty(showtimes)}">
+        <div th:each="movie : ${showtimes}">
+
+
+            <div class="card w-100 mb-3">
+                <div class="card-body">
+                    <h5 class="montserrat-bold">
+                        <span th:text="${movie.key}"> Ten phim </span>
+                        &nbsp;<i class="bi bi-heart"></i>
+                    </h5>
+                    <!-- Get first showtime from any room type to access poster image -->
+                    <img
+                            th:with="firstShowtime=${movie.value.values().iterator().next().get(0)}"
+                            th:src="${firstShowtime.movie.poster}"
+                            class="col-4 object-fit-cover"
+                            style="height: 6.5rem"
+                    />
+                    <div th:each="roomType : ${movie.value}">
+                        <div class="mb-2">
+                            <strong th:text="${roomType.key}">Rạp 2D</strong>
+                        </div>
+                        <div class="d-flex column-gap-2 mb-2">
+                            <th:block th:each="showtime : ${roomType.value}">
+                                <a th:href="@{/cart/{id}/seat(id=${showtime.showtimeId})}" class="btn btn-warning fw-bold" style="width: 5rem"
+                                   th:text="${#temporals.format(showtime.startingTime, 'HH:mm')}">
+                                </a>
+                            </th:block>
+                        </div>
+                        <hr th:if="${!roomType.key.equals(movie.value.keySet().toArray()[movie.value.size() - 1])}">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 </main>
@@ -72,6 +114,103 @@
         }
 
         window.location.href = url;
+    }
+
+
+
+
+
+    // Add click handlers for date selection
+    document.addEventListener('DOMContentLoaded', function() {
+        const dates = document.querySelectorAll('.show-date');
+
+        // Get date from URL if it exists
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+
+        if (dateParam) {
+            // If date parameter exists in URL, select that date
+            dates.forEach(date => {
+                if (date.dataset.date === dateParam) {
+                    date.classList.add('selected');
+                    date.classList.remove('border-warning-subtle');
+                    date.classList.remove('border');
+                    date.classList.add('bg-light');
+                    date.classList.add('text-dark');
+                }
+            });
+        } else if (dates.length > 0) {
+            // If no date parameter, select first date
+            dates[0].classList.add('selected');
+            dates[0].classList.remove('border-warning-subtle');
+            dates[0].classList.remove('border');
+            dates[0].classList.add('bg-light');
+            dates[0].classList.add('text-dark');
+        }
+
+        dates.forEach(date => {
+            date.addEventListener('click', function() {
+                // Remove selection from all dates
+                dates.forEach(d => {
+                    d.classList.remove('selected');
+                    d.style.backgroundColor = '';
+                });
+
+                // Add selection to clicked date
+                this.classList.add('selected');
+                this.style.backgroundColor = '#ffc107';
+
+                filterShowtimesByDate();
+            });
+        });
+
+
+        // Scroll to showtimes section if date parameter exists
+        //if (urlParams.has('date')) {
+        //    document.getElementById('showtimes-section').scrollIntoView({behavior: 'smooth', block: "start"});
+        //}
+    });
+
+
+
+
+    function filterShowtimesByDate() {
+        const currentUrl = new URL(window.location.href);
+        const regionId = currentUrl.searchParams.get('regionId');
+        const cinemaId = currentUrl.searchParams.get('cinemaId');
+        const selectedDateElement = document.querySelector('.show-date.selected');
+        const date = selectedDateElement ? selectedDateElement.dataset.date : '';
+
+        //let url = '/cinema?cinemaId=' + cinemaId;
+        //if (regionId) {
+        //    url += '&regionId=' + regionId;
+        //}
+
+        //window.location.href = url;
+
+        //const regionId = document.getElementById('regionSelect').value;
+        //const cinemaId = document.getElementById('cinemaSelect').value;
+        //const selectedDateElement = document.querySelector('.show-date.selected');
+        //const date = selectedDateElement ? selectedDateElement.dataset.date : '';
+
+        console.log('Selected Region ID:', regionId);
+        console.log('Selected Cinema ID:', cinemaId);
+        console.log('Selected Date:', date);
+
+        //const currentUrl = new URL(window.location.href);
+        //const baseUrl = currentUrl.pathname;
+
+        let url = `/cinema?date=${date}`;
+        if (cinemaId) {
+            url += `&cinemaId=${cinemaId}`;
+        }
+        if (regionId) {
+            url += `&regionId=${regionId}`;
+        }
+
+        window.location.href = url;
+
+
     }
 
 </script>

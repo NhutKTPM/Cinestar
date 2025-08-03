@@ -5,7 +5,6 @@ import com.da3.MovieTicket.entity.MovieEntity;
 import com.da3.MovieTicket.entity.RegionEntity;
 import com.da3.MovieTicket.entity.ShowtimeEntity;
 import com.da3.MovieTicket.repository.ShowtimeRepository;
-import com.da3.MovieTicket.repository.ShowtimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +52,7 @@ public class ShowtimeService {
 
     public Map<String, Map<String, List<ShowtimeEntity>>> getShowtimesGroupedByCinema(MovieEntity movie, LocalDate date, CinemaEntity cinema, RegionEntity region) {
         List<ShowtimeEntity> showtimes;
-        if (cinema != null) {showtimes = showtimeRepository.findByShowDateAndCinema(movie, date, cinema);}
+        if (cinema != null) {showtimes = showtimeRepository.findByMovieShowDateAndCinema(movie, date, cinema);}
         else {
             if (region != null) {
                 showtimes = showtimeRepository.findByShowDateAndRegion(movie, date, region);
@@ -65,6 +64,20 @@ public class ShowtimeService {
         return showtimes.stream()
                 .collect(Collectors.groupingBy(
                         showtime -> showtime.getRoom().getCinema().getCinemaName(),
+                        Collectors.groupingBy(
+                                showtime -> showtime.getRoom().getRoomType().getRoomTypeName()
+                        )
+                ));
+    }
+
+
+    public Map<String, Map<String, List<ShowtimeEntity>>> getShowtimesGroupedByMovie(LocalDate date, CinemaEntity cinema) {
+        List<ShowtimeEntity> showtimes = showtimeRepository.findByShowDateAndCinema(date, cinema);
+
+
+        return showtimes.stream()
+                .collect(Collectors.groupingBy(
+                        showtime -> showtime.getMovie().getMovieName(),
                         Collectors.groupingBy(
                                 showtime -> showtime.getRoom().getRoomType().getRoomTypeName()
                         )

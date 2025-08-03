@@ -27,7 +27,8 @@ public class CinemaController {
     @GetMapping("/cinema")
     public String moviesPage(Model model,
                              @RequestParam(value = "regionId", required = false) Long regionId,
-                             @RequestParam(value = "cinemaId", required = false) Long cinemaId)
+                             @RequestParam(value = "cinemaId", required = false) Long cinemaId,
+                             @RequestParam(value = "date", required = false) LocalDate date)
     {
         List<RegionEntity> regions = regionService.getAllRegions();
         model.addAttribute("regions", regions);
@@ -45,7 +46,14 @@ public class CinemaController {
         }
         model.addAttribute("cinemaId", cinemaId);
         CinemaEntity cinema = cinemaService.getCinemaById(cinemaId);
-        model.addAttribute("showDates", showtimeService.getDistinctShowDatesForCinema(cinema));
+
+        List<LocalDate> showDates = showtimeService.getDistinctShowDatesForCinema(cinema);
+        model.addAttribute("showDates", showDates);
+
+        if (date == null && !showDates.isEmpty()){
+            date = showDates.getFirst();
+        }
+        model.addAttribute("showtimes", showtimeService.getShowtimesGroupedByMovie(date, cinema));
         return "cinema/cinema";
     }
 

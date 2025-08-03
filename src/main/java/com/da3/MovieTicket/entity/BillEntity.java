@@ -68,17 +68,13 @@ public class BillEntity {
         return totalConcession;
     }
 
+    public Long getTempTotal(){
+        return getTotalTicket() + getTotalConcessions();
+    }
+
     public Long getTotal() {
-        Long total = 0L;
-        // Add seats total
-        for (TicketEntity ticket : tickets) {
-            total = total + ticket.getSeat().getSeatType().getPrice();
-        }
-        // Add concessions total
-        for (BillConcessionItemEntity item : concessionItems) {
-            total = total + (item.getConcession().getPrice()
-                    * (long) item.getQuantity());
-        }
+        Long total = getTempTotal();
+
         // Subtract gift cards
         for (BillGiftCardUsageEntity usage : giftCardUsages) {
             total = total - usage.getUsedAmount();

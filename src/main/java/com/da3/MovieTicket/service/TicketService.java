@@ -28,4 +28,10 @@ public class TicketService {
         return ticketRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid ticket Id: " + id));
     }
+
+
+    public long countAllTickets() {
+        return ticketRepository.count();
+    }
+
 }

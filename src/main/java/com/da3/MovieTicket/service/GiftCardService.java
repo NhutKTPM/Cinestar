@@ -1,5 +1,6 @@
 package com.da3.MovieTicket.service;
 
+import com.da3.MovieTicket.entity.BillEntity;
 import com.da3.MovieTicket.entity.GiftCardEntity;
 import com.da3.MovieTicket.repository.GiftCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,16 @@ public class GiftCardService {
     public void useGiftCard(GiftCardEntity giftCard, Long amountUsing){
         giftCard.setCurrentBalance(giftCard.getCurrentBalance() - amountUsing);
         giftCardRepository.save(giftCard);
+    }
+
+
+
+    public Long getTotalAllTimeGiftCardsSold() {
+        List<GiftCardEntity> allGiftCards = getAllGiftCards();
+        return allGiftCards.stream()
+                .filter(GiftCardEntity::isEnabled)  // Only count enabled bills
+                .mapToLong(GiftCardEntity::getInitialBalance)
+                .sum();
     }
 
 }

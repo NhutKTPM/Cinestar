@@ -17,7 +17,7 @@
                         <th scope="col">Tên phòng</th>
                         <th scope="col">Loại phòng</th>
                         <th scope="col">Rạp</th>
-                        <th scope="col">Actions</th>
+<!--                        <th scope="col">Actions</th>-->
                     </tr>
                     </thead>
                     <tbody>
@@ -27,7 +27,7 @@
                         <td th:if="${room.cinema != null}" th:text="${room.cinema.cinemaName}">Hà Nội</td>
                         <td th:if="${room.cinema == null}">Không có</td>
                         <td th:text="${room.roomType.roomTypeName}">Hà Nội</td>
-                        <td> <a th:href="@{/admin/room/initializeRoomSeats/{id}(id=${room.roomId})}" class="btn btn-primary">Tạo ghế</a></td>
+<!--                        <td> <a th:href="@{/admin/room/initializeRoomSeats/{id}(id=${room.roomId})}" class="btn btn-primary">Tạo ghế</a></td>-->
                     </tr>
                     </tbody>
                 </table>

@@ -14,13 +14,19 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
     
     List<MovieEntity> findByEnabledTrueAndShowDateLessThanEqualOrderByShowDateDesc(LocalDate currentDate);
 
+    List<MovieEntity> findByEnabledTrueAndShowDateLessThanEqualAndGenresGenreIdOrderByShowDateDesc(LocalDate currentDate, Long genreId);
+
     List<MovieEntity> findTop8ByEnabledTrueAndShowDateGreaterThanOrderByShowDateAsc(LocalDate currentDate);
 
     List<MovieEntity> findByEnabledTrueAndShowDateGreaterThanOrderByShowDateAsc(LocalDate currentDate);
+
+    List<MovieEntity> findByEnabledTrueAndShowDateGreaterThanAndGenresGenreIdOrderByShowDateDesc(LocalDate currentDate, Long genreId);
 
     List<MovieEntity> findAllByOrderByShowDateDesc();
 
     List<MovieEntity> findByGenresGenreIdAndEnabledTrue(Long genreId);
 
     List<MovieEntity> findByMovieNameContainingIgnoreCaseAndEnabledTrue(String searchTerm);
+
+    List<MovieEntity> findTop3ByEnabledTrueAndShowDateLessThanEqualOrderByShowDateDesc(LocalDate currentDate);
 }

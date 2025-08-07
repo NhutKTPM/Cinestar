@@ -58,5 +58,6 @@ public class MovieEntity {
     )
     private Set<GenreEntity> genres = new HashSet<>();
 
+    private String rating = "P";
 
 }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: common-head"></head>
+<body class="container">
+<div th:replace="~{fragments/admin-navbar :: admin-navbar}"></div>
+
+<main>
+    <div class="container bg-secondary-subtle p-4">
+        <div class="row">
+            <div th:replace="~{fragments/admin-sidebar :: admin-sidebar}"></div>
+
+            <div class="col-10">
+
+                <h2>Thêm phim</h2>
+                <form th:action="@{/admin/movie/addMovie}" method="post" enctype="multipart/form-data" th:object="${newMovie}">
+                    <div class="mb-3">
+                        <label for="movieName" class="form-label">Tên phim</label>
+                        <input type="text" th:field="*{movieName}" class="form-control" id="movieName" >
+
+                        <label for="showDate" class="form-label">Ngày khởi chiếu</label>
+                        <input type="date" th:field="*{showDate}" class="form-control" id="showDate" >
+
+                        <label for="length" class="form-label">Thời lượng</label>
+                        <input type="number" th:field="*{length}" class="form-control" id="length" >
+
+                        <label for="description" class="form-label">Mô tả</label>
+                        <input type="text" th:field="*{description}" class="form-control" id="description" >
+
+                        <label for="poster" class="form-label">Poster</label>
+                        <input type="file" name="posterFile" accept="image/*" class="form-control" id="poster">
+
+                        <label for="trailer" class="form-label">Trailer</label>
+                        <input type="text" th:field="*{trailer}" class="form-control" id="trailer" >
+
+                        <label for="actors" class="form-label">Diễn viên</label>
+                        <input type="text" th:field="*{actors}" class="form-control" id="actors" >
+
+                        <label for="director" class="form-label">Đạo diễn</label>
+                        <input type="text" th:field="*{director}" class="form-control" id="director" >
+
+                        <label for="country" class="form-label">Nước xuất xứ</label>
+                        <input type="text" th:field="*{country}" class="form-control" id="country" >
+
+
+                        <label for="rating" class="form-label">Phân loại độ tuổi</label>
+                        <select th:field="*{rating}" class="form-control" id="rating">
+                            <option value="P">P</option>
+                            <option value="K">K</option>
+                            <option value="T13">T13</option>
+                            <option value="T16">T16</option>
+                            <option value="T18">T18</option>
+                        </select>
+
+
+                    </div>
+
+
+
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</body>
+</html>

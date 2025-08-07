@@ -38,14 +38,14 @@
                         <label for="roomName" class="form-label">Tên phòng</label>
                         <input type="text" th:field="*{roomName}" class="form-control" id="roomName" >
 
-                        <label for="cinemaId" class="form-label">Chọn khu vực</label>
+                        <label for="cinemaId" class="form-label">Chọn rạp</label>
                         <select class="form-select" id="cinemaId" name="cinemaId">
                             <option th:each="cinema : ${cinemas}" th:if="${cinema.enabled}"
                                     th:value="${cinema.cinemaId}"
                                     th:text="${cinema.cinemaName}"></option>
                         </select>
 
-                        <label for="roomTypeId" class="form-label">Chọn khu vực</label>
+                        <label for="roomTypeId" class="form-label">Chọn loại phòng</label>
                         <select class="form-select" id="roomTypeId" name="roomTypeId">
                             <option th:each="roomType : ${roomTypes}" th:if="${roomType.enabled}"
                                     th:value="${roomType.roomTypeId}"

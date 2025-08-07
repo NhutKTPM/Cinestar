@@ -8,10 +8,10 @@
 <main>
 
 <div class="container bg-secondary-subtle p-4">
-    Danh sách rạp chiếu
+    <h2 class="montserrat-display">Danh sách rạp chiếu </h2>
 
-    <div>Chọn khu vực</div>
-    <div class="col-4 mb-3">
+    <div class="fw-bold mb-2">Chọn khu vực</div>
+    <div class="col-12 col-lg-4 mb-3">
         <select id="regionSelect" class="form-select" aria-label="Region select">
             <th:block th:each="region : ${regions}">
                 <option th:value="${region.regionId}" th:text="${region.regionName}"
@@ -21,7 +21,7 @@
     </div>
 
     <div class="row row-gap-4 mb-5">
-        <div class="col-4" th:each="cinema: ${cinemas}">
+        <div class="col-12 col-lg-4" th:each="cinema: ${cinemas}">
             <div th:class="${cinema.cinemaId==cinemaId} ? 'card border-primary-subtle bg-primary-subtle' : 'card'"
                  style="cursor: pointer;"
                  th:onclick="selectCinema([[${cinema.cinemaId}]])"
@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <div th:if="${not #lists.isEmpty(showDates)}" class="d-flex column-gap-2 mb-3">
+    <div th:if="${not #lists.isEmpty(showDates)}" class="d-flex column-gap-2 mb-3 overflow-x-auto">
         <div th:each="showDate : ${showDates}"
              th:data-date="${#temporals.format(showDate, 'yyyy-MM-dd')}"
              class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center show-date"
@@ -62,17 +62,23 @@
 
             <div class="card w-100 mb-3">
                 <div class="card-body">
-                    <h5 class="montserrat-bold">
-                        <span th:text="${movie.key}"> Ten phim </span>
-                        &nbsp;<i class="bi bi-heart"></i>
-                    </h5>
-                    <!-- Get first showtime from any room type to access poster image -->
-                    <img
-                            th:with="firstShowtime=${movie.value.values().iterator().next().get(0)}"
-                            th:src="${firstShowtime.movie.poster}"
-                            class="col-4 object-fit-cover"
-                            style="height: 6.5rem"
-                    />
+                    <div class="d-flex mb-3">
+                        <!-- Get first showtime from any room type to access poster image -->
+                        <img
+                                th:with="firstShowtime=${movie.value.values().iterator().next().get(0)}"
+                                th:src="${firstShowtime.movie.poster}"
+                                class="object-fit-cover me-3"
+                                style="height: 6.5rem; width:6.5rem"
+                        />
+                        <h5 class="montserrat-bold">
+                            <a th:with="firstShowtime=${movie.value.values().iterator().next().get(0)}"
+                                    th:href="@{/movie/{id}(id=${firstShowtime.movie.movieId})}" th:text="${movie.key}"
+                            class="text-light text-decoration-none"> Ten phim </a>
+<!--                            &nbsp;<i class="bi bi-heart"></i>-->
+                        </h5>
+
+                    </div>
+
                     <div th:each="roomType : ${movie.value}">
                         <div class="mb-2">
                             <strong th:text="${roomType.key}">Rạp 2D</strong>

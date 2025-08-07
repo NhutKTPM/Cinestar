@@ -10,6 +10,7 @@ import java.util.List;
 public class CartDTO {
     private String poster;
     private String movieName;
+    private String rating;
     private String roomType;
     private LocalDateTime startingTime;
     private LocalDateTime endingTime;

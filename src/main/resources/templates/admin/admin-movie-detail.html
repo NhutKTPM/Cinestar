@@ -32,10 +32,12 @@
                     </div>
                 </div>
 
+                <a th:href="@{/admin/movie/{id}/editMoviePage(id=${movie.movieId})}" class="btn btn-warning mb-3">Sửa thông tin phim</a>
                 <h3 class="montserrat-bold">
                     <span th:text="${movie.movieName}">Từ Vũ Trụ John Wick: Ballerina</span>
-                    <span class="badge text-bg-warning">P</span>
+                    <span class="badge text-bg-warning" th:text="${movie.rating}">P</span>
                 </h3>
+
                 <div class="d-flex">
                     <div>
                         <i class="bi bi-clock text-warning"></i>&nbsp; <span th:text="${movie.length}"></span> phút
@@ -52,24 +54,21 @@
                     </span>
                 </div>
 
-                <h2>Thêm thể loại</h2>
+                <hr>
+                <h5 class="montserrat-bold">Thêm thể loại</h5>
                 <form th:action="@{/admin/movie/{id}/addGenre(id=${movie.movieId})}" method="post">
                     <div class="mb-3">
-                        <label for="genreId" class="form-label">Chọn thể loại</label>
                         <select class="form-select" id="genreId" name="genreId">
                             <option value="">-- Không chọn thể loại --</option>
                             <option th:each="genre : ${genres}" th:if="${genre.enabled}"
                                     th:value="${genre.genreId}"
                                     th:text="${genre.genreName}"></option>
                         </select>
-
-
                     </div>
-
-
-
                     <button type="submit" class="btn btn-primary">Thêm</button>
                 </form>
+                <hr>
+                
 
                 <div><strong>Đạo diễn:</strong> <span th:text="${movie.director}"></span></div>
                 <div>
@@ -87,7 +86,7 @@
 
 
 
-                <h2>Thêm suất chiếu</h2>
+                <h3 class="montserrat-bold">Thêm suất chiếu</h3>
                 <form th:action="@{/admin/movie/{id}/addShowtime(id=${movie.movieId})}" method="post" th:object="${newShowtime}">
                     <div class="mb-3">
 
@@ -99,7 +98,7 @@
                             <option value="">-- Không chọn phòng chiếu --</option>
                             <option th:each="room : ${rooms}" th:if="${room.enabled}"
                                     th:value="${room.roomId}"
-                                    th:text="${room.roomName} + ' - ' + ${room.roomType.roomTypeName} + ' - ' + ${room.cinema.cinemaName}"></option>
+                                    th:text="${room.roomName} + ' - ' + ${room.roomType.roomTypeName} + ' - ' + ${room.cinema.cinemaName} + ' - ' + ${room.cinema.region.regionName}"></option>
                         </select>
 
                     </div>
@@ -107,7 +106,7 @@
                     <button type="submit" class="btn btn-primary">Thêm</button>
                 </form>
 
-                <table class="table">
+                <table class="table mt-3">
                     <thead>
                     <tr>
                         <th scope="col">Id</th>
@@ -119,7 +118,7 @@
                     <tr th:each="showtime: ${showtimes}">
                         <td th:text="${showtime.showtimeId}">1</td>
                         <td th:text="${#temporals.format(showtime.startingTime, 'dd/MM/yyyy HH:mm')}">Hà Nội</td>
-                        <td th:text="${showtime.room.roomName} + ' - ' + ${showtime.room.roomType.roomTypeName} + ' - ' + ${showtime.room.cinema.cinemaName}">Hà Nội</td>
+                        <td th:text="${showtime.room.roomName} + ' - ' + ${showtime.room.roomType.roomTypeName} + ' - ' + ${showtime.room.cinema.cinemaName} + ' - ' + ${showtime.room.cinema.region.regionName}">Hà Nội</td>
                     </tr>
                     </tbody>
                 </table>

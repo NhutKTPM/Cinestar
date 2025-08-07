@@ -9,21 +9,44 @@
 
 <div class="container bg-secondary-subtle p-4">
     <div>
-        <a href="/movie?showingOrUpcoming=showing" class="btn btn-outline-light me-2">Đang chiếu</a>
-        <a href="/movie?showingOrUpcoming=upcoming" class="btn btn-outline-light">Sắp chiếu</a>
+        <th:block th:if="${param.showingOrUpcoming == null}">
+            <a th:href="@{/movie(showingOrUpcoming='showing', genreId=${param.genreId})}"
+               class="btn btn-light me-2">
+                Đang chiếu
+            </a>
+            <a th:href="@{/movie(showingOrUpcoming='upcoming', genreId=${param.genreId})}"
+               class="btn btn-outline-light me-2">
+                Sắp chiếu
+            </a>
+        </th:block>
+        <th:block th:if="${param.showingOrUpcoming != null}">
+            <a th:href="@{/movie(showingOrUpcoming='showing', genreId=${param.genreId})}"
+               th:class="${param.showingOrUpcoming[0] == 'showing' ? 'btn btn-light me-2' : 'btn btn-outline-light me-2'}">
+                Đang chiếu
+            </a>
+            <a th:href="@{/movie(showingOrUpcoming='upcoming', genreId=${param.genreId})}"
+               th:class="${param.showingOrUpcoming[0] == 'upcoming' ? 'btn btn-light me-2' : 'btn btn-outline-light me-2'}">
+                Sắp chiếu
+            </a>
+        </th:block>
     </div>
 
     <div class="mt-3">
+        <a class="btn me-2 mb-2"
+           th:classappend="${param.genreId == null or param.genreId[0].isEmpty() ? 'btn-light' : 'btn-outline-light'}"
+           th:href="@{/movie(showingOrUpcoming=${param.showingOrUpcoming == null ? 'showing' : param.showingOrUpcoming})}"
+        >Tất cả thể loại</a>
         <span th:each="genre : ${genres}">
-            <a class="btn btn-outline-light me-2" th:text="${genre.genreName}"
-               th:href="@{/movie(genreId=${genre.genreId})}"
+            <a class="btn me-2 mb-2" th:text="${genre.genreName}"
+               th:classappend="${param.genreId != null and param.genreId[0] == genre.genreId.toString() ? 'btn-light' : 'btn-outline-light'}"
+               th:href="@{/movie(showingOrUpcoming=${param.showingOrUpcoming == null ? 'showing' : param.showingOrUpcoming}, genreId=${genre.genreId})}"
             ></a>
         </span>
     </div>
 
 
     <div class="row row-gap-4 mb-3 mt-3">
-        <div th:each="movie: ${movies}" class="col-3">
+        <div th:each="movie: ${movies}" class="col-6 col-lg-3">
             <div th:replace="~{fragments/movieCard :: movieCard(${movie})}"></div>
         </div>
     </div>

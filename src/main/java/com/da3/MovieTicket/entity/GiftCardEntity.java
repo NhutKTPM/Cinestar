@@ -44,9 +44,7 @@ public class GiftCardEntity {
     @JoinColumn(name = "recipientId")
     private UserEntity recipient;  // User who received the gift card (optional)
 
-    @ManyToOne
-    @JoinColumn(name = "usageId")
-    private BillGiftCardUsageEntity giftCardUsages;  // User who received the gift card (optional)
+
 
     private LocalDateTime expirationDate;
 

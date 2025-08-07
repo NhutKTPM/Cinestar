@@ -16,25 +16,22 @@ import java.util.Map;
 
 @Controller
 public class MovieController {
-    private final MovieService movieService;
-    private final ShowtimeService showtimeService;
-    private final RegionService regionService;
-    private final CinemaService cinemaService;
-    private final GenreService genreService;
-
-
     @Autowired
-    public MovieController(MovieService movieService,
-                           ShowtimeService showtimeService,
-                           RegionService regionService,
-                           CinemaService cinemaService,
-                           GenreService genreService) {
-        this.movieService = movieService;
-        this.showtimeService = showtimeService;
-        this.regionService = regionService;
-        this.cinemaService = cinemaService;
-        this.genreService = genreService;
-    }
+    private MovieService movieService;
+    @Autowired
+    private ShowtimeService showtimeService;
+    @Autowired
+    private RegionService regionService;
+    @Autowired
+    private CinemaService cinemaService;
+    @Autowired
+    private GenreService genreService;
+    @Autowired
+    private BillService billService;
+
+
+    
+
 
     @GetMapping("/movie")
     public String moviesPage(Model model,
@@ -45,9 +42,18 @@ public class MovieController {
 
         if (showingOrUpcoming != null) {
             if (showingOrUpcoming.equals("showing")) {
-                movies = movieService.getCurrentlyShowingMovies();
+                if (genreId != null) {
+                    movies = movieService.getCurrentlyShowingMoviesByGenre(genreId);
+                } else {
+                    movies = movieService.getCurrentlyShowingMovies();
+                }
+
             } else {
-                movies = movieService.getUpcomingMovies();
+                if (genreId != null) {
+                    movies = movieService.getUpcomingMoviesByGenre(genreId);
+                } else {
+                    movies = movieService.getUpcomingMovies();
+                }
             }
         }
         else if (genreId != null) {
@@ -96,6 +102,20 @@ public class MovieController {
         List<RegionEntity> regions = regionService.getAllRegions();
         model.addAttribute("regions", regions);
 
+        model.addAttribute("top3Movies", movieService.getTop3CurrentlyShowingMovies());
+
+        List<BillEntity> bills = billService.getBillsByMovie(movie);
+        model.addAttribute("bills", bills);
+        if (!bills.isEmpty()) {
+            Double averageRating = bills.stream()
+                    .filter(bill -> bill.getRating() != null)
+                    .mapToDouble(BillEntity::getRating)
+                    .average()
+                    .orElse(0.0);
+            if (averageRating > 0.0) {
+                model.addAttribute("averageRating", averageRating);
+            }
+        }
 
         return "movie/movie-detail";
     }

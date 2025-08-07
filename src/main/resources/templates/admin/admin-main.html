@@ -17,32 +17,32 @@
                     <div class="col-3">
                         <div class="card">
                             <div class="card-body">
-                                <div>Tổng doanh thu</div>
-                                <div th:text="${#numbers.formatDecimal(totalEarnings, 0, 'COMMA', 0, 'POINT')} + ' đ'"> </div>
+                                <h5 class="montserrat-display">Tổng doanh thu</h5>
+                                <h5 class="montserrat-display text-warning" th:text="${#numbers.formatDecimal(totalEarnings, 0, 'COMMA', 0, 'POINT')} + ' đ'"> </h5>
                             </div>
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="card">
                             <div class="card-body">
-                                <div>Tổng vé bán</div>
-                                <div th:text="${ticketsSold}">3945 vé</div>
+                                <h5 class="montserrat-display">Tổng vé bán</h5>
+                                <h5 class="montserrat-display text-warning" th:text="${ticketsSold}">3945 vé</h5>
                             </div>
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="card">
                             <div class="card-body">
-                                <div>Tổng thẻ quà tặng</div>
-                                <div th:text="${#numbers.formatDecimal(totalGiftCards, 0, 'COMMA', 0, 'POINT')} + ' đ'">5,000,000 đ</div>
+                                <h5 class="montserrat-display">Tổng thẻ quà tặng</h5>
+                                <h5 class="montserrat-display text-warning" th:text="${#numbers.formatDecimal(totalGiftCards, 0, 'COMMA', 0, 'POINT')} + ' đ'">5,000,000 đ</h5>
                             </div>
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="card">
                             <div class="card-body">
-                                <div>Tổng bắp nước</div>
-                                <div th:text="${#numbers.formatDecimal(totalConcessions, 0, 'COMMA', 0, 'POINT')} + ' đ'">5,000,000 đ</div>
+                                <h5 class="montserrat-display">Tổng bắp nước</h5>
+                                <h5 class="montserrat-display text-warning" th:text="${#numbers.formatDecimal(totalConcessions, 0, 'COMMA', 0, 'POINT')} + ' đ'">5,000,000 đ</h5>
                             </div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                     <div class="col-8">
                         <div class="card">
                             <div class="card-body">
-                                Doanh thu trong tuần qua
+                                <h5 class="montserrat-display">Doanh thu trong tuần qua</h5>
                                 <canvas id="revenueChart"></canvas>
 
                             </div>
@@ -61,7 +61,7 @@
                     <div class="col-4">
                         <div class="card">
                             <div class="card-body">
-                                Doanh thu theo phim
+                                <h5 class="montserrat-display">Doanh thu theo phim</h5>
                                 <canvas id="revenueByMoviesChart"></canvas>
 
                             </div>

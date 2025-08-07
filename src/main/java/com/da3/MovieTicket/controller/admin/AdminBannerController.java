@@ -44,7 +44,6 @@ public class AdminBannerController {
 
     @PostMapping("/admin/banner/{id}/disable")
     public String disableBanner (@PathVariable Long id){
-        Banner banner = bannerService.getBannerById(id);
         bannerService.disableBanner(id);
         return "redirect:/admin/banner";
     }

@@ -10,13 +10,16 @@
 <div class="container bg-secondary-subtle p-4">
 
     <h2 class="montserrat-display mb-3">Chọn hình</h2>
-    <div>
+    <div class="row row-gap-4">
         <a th:each="giftCardImage : ${giftCardImages}"
-           th:href="@{/giftcard/checkout(imageId=${giftCardImage.id})}">
-        <img
-                    th:src="@{${giftCardImage.image}}"
-                    style="height:100px;"
-            />
+           th:href="@{/giftcard/checkout(imageId=${giftCardImage.id})}"
+            class="col-6 col-lg-3">
+            <div class="ratio w-100" style="--bs-aspect-ratio: 60%;">
+                <img
+                            th:src="@{${giftCardImage.image}}"
+                            class="w-100 object-fit-cover rounded-4"
+                    />
+            </div>
 
         </a>
     </div>

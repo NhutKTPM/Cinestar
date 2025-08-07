@@ -8,36 +8,36 @@
 
 <div class="container bg-secondary-subtle p-4">
     <div class="row pb-5">
-        <div class="col-8">
-            <div class="montserrat-bold">Điểm thưởng</div>
-            <div>Bạn đang có: 12 điểm thưởng</div>
-            <div class="form-check">
-                <input
-                        class="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="checkChecked"
-                        checked
-                />
-                <label class="form-check-label" for="checkChecked">
-                    Sử dụng điểm thưởng
-                </label>
-            </div>
-            <hr />
-            <div class="montserrat-bold">Mã giảm giá</div>
-            <div class="">
-                <label for="exampleFormControlInput1" class="form-label"
-                >Nhập mã giảm giá:</label
-                >
-                <input
-                        type="email"
-                        class="form-control"
-                        id="exampleFormControlInput1"
-                        placeholder=""
-                        style="width: 20rem"
-                />
-            </div>
-            <hr />
+        <div class="col-12 col-lg-8">
+<!--            <div class="montserrat-bold">Điểm thưởng</div>-->
+<!--            <div>Bạn đang có: 12 điểm thưởng</div>-->
+<!--            <div class="form-check">-->
+<!--                <input-->
+<!--                        class="form-check-input"-->
+<!--                        type="checkbox"-->
+<!--                        value=""-->
+<!--                        id="checkChecked"-->
+<!--                        checked-->
+<!--                />-->
+<!--                <label class="form-check-label" for="checkChecked">-->
+<!--                    Sử dụng điểm thưởng-->
+<!--                </label>-->
+<!--            </div>-->
+<!--            <hr />-->
+<!--            <div class="montserrat-bold">Mã giảm giá</div>-->
+<!--            <div class="">-->
+<!--                <label for="exampleFormControlInput1" class="form-label"-->
+<!--                >Nhập mã giảm giá:</label-->
+<!--                >-->
+<!--                <input-->
+<!--                        type="email"-->
+<!--                        class="form-control"-->
+<!--                        id="exampleFormControlInput1"-->
+<!--                        placeholder=""-->
+<!--                        style="width: 20rem"-->
+<!--                />-->
+<!--            </div>-->
+<!--            <hr />-->
 
             <div class="montserrat-bold">Thẻ quà tặng</div>
             <div class="mb-2">Chọn thẻ quà tặng:</div>
@@ -48,15 +48,26 @@
                         <input class="form-check-input me-3" type="checkbox"
                                th:value="${giftCard.giftCardId}"
                                th:id="'giftCard' + ${giftCard.giftCardId}">
+<!--                        <img th:if="${giftCard.giftCardImage}"-->
+<!--                             th:src="@{${giftCard.giftCardImage.image}}"-->
+<!--                             class="gift-card-image me-3"-->
+<!--                             style="width: 100px; height: 60px; object-fit: cover;">-->
+<!--                        <div>-->
+<!--                            <h6 class="card-title mb-1">Thẻ quà tặng #[[${giftCard.giftCardCode}]]</h6>-->
+<!--                            <p class="card-text mb-1">Số dư ban đầu: [[${#numbers.formatDecimal(giftCard.initialBalance, 0, 'COMMA', 0, 'POINT')}]] ₫</p>-->
+<!--                            <p class="card-text mb-1">Số dư hiện tại: [[${#numbers.formatDecimal(giftCard.currentBalance, 0, 'COMMA', 0, 'POINT')}]] ₫</p>-->
+<!--                            <p class="card-text mb-0">Người mua: [[${giftCard.purchaser.fullName}]]</p>-->
+<!--                        </div>-->
+
                         <img th:if="${giftCard.giftCardImage}"
                              th:src="@{${giftCard.giftCardImage.image}}"
-                             class="gift-card-image me-3"
-                             style="width: 100px; height: 60px; object-fit: cover;">
+                             class="gift-card-image me-3 rounded-3"
+                             style="width: 150px; height: 90px; object-fit: cover;">
                         <div>
-                            <h6 class="card-title mb-1">Thẻ quà tặng #[[${giftCard.giftCardCode}]]</h6>
-                            <p class="card-text mb-1">Số dư ban đầu: [[${#numbers.formatDecimal(giftCard.initialBalance, 0, 'COMMA', 0, 'POINT')}]] ₫</p>
-                            <p class="card-text mb-1">Số dư hiện tại: [[${#numbers.formatDecimal(giftCard.currentBalance, 0, 'COMMA', 0, 'POINT')}]] ₫</p>
-                            <p class="card-text mb-0">Người mua: [[${giftCard.purchaser.fullName}]]</p>
+                            <h6 class="card-title mb-1"><strong>Mã thẻ: </strong> [[${giftCard.giftCardCode}]]</h6>
+                            <p class="card-text mb-1"><strong>Số dư ban đầu: </strong>[[${#numbers.formatDecimal(giftCard.initialBalance, 0, 'COMMA', 0, 'POINT')}]] ₫</p>
+                            <p class="card-text mb-1"><strong>Số dư hiện tại: </strong> <span class="fw-bold text-warning"> [[${#numbers.formatDecimal(giftCard.currentBalance, 0, 'COMMA', 0, 'POINT')}]] ₫ </span></p>
+                            <p class="card-text mb-0"><strong>Người tặng: </strong>[[${giftCard.purchaser.fullName}]]</p>
                         </div>
                     </div>
                 </div>
@@ -103,7 +114,7 @@
             </div>
         </div>
 
-        <div class="col-4">
+        <div class="col-12 col-lg-4">
             <div th:replace="~{fragments/cart :: cart(${cart})}"></div>
 
             <div class="d-flex justify-content-between mt-3">

@@ -1,22 +1,14 @@
 package com.da3.MovieTicket.controller.admin;
 
-import com.da3.MovieTicket.entity.GenreEntity;
-import com.da3.MovieTicket.entity.MovieEntity;
-import com.da3.MovieTicket.entity.RoomEntity;
-import com.da3.MovieTicket.entity.ShowtimeEntity;
+import com.da3.MovieTicket.entity.*;
 import com.da3.MovieTicket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class AdminMovieController {
@@ -42,13 +34,53 @@ public class AdminMovieController {
     public String adminMovie(Model model){
         List<MovieEntity> movies = movieService.getAllMovies();
 
-        List<GenreEntity> allGenres = genreService.getAllGenres();
+//        List<GenreEntity> allGenres = genreService.getAllGenres();
         model.addAttribute("movies", movies);
 
-        model.addAttribute("allGenres", allGenres);
+//        model.addAttribute("allGenres", allGenres);
         model.addAttribute("newMovie", new MovieEntity());
 
         return "admin/admin-movie";
+    }
+
+    @GetMapping("/admin/movie/newMoviePage")
+    public String adminNewMoviePage(Model model){
+
+        model.addAttribute("newMovie", new MovieEntity());
+
+        return "admin/admin-movie-new";
+    }
+
+    @GetMapping("/admin/movie/{id}/editMoviePage")
+    public String adminEditMoviePage(Model model, @PathVariable("id") long id){
+        MovieEntity movie = movieService.getMovieById(id);
+        model.addAttribute("movie", movie);
+
+        return "admin/admin-movie-edit";
+    }
+
+    @PostMapping("/admin/movie/{id}/updateMovie")
+    public String updateMovie (MovieEntity movie, @PathVariable("id") long id,
+                            @RequestParam(value = "posterFile", required = false) MultipartFile poster
+    ){
+        MovieEntity movieInDB = movieService.getMovieById(id);
+        movieInDB.setMovieName(movie.getMovieName());
+        movieInDB.setShowDate(movie.getShowDate());
+        movieInDB.setLength(movie.getLength());
+        movieInDB.setDescription(movie.getDescription());
+        if (poster != null && !poster.isEmpty()) {
+            String posterUrl = fileService.handleFileUpload(poster);
+            movieInDB.setPoster(posterUrl);
+        }
+        movieInDB.setTrailer(movie.getTrailer());
+        movieInDB.setActors(movie.getActors());
+        movieInDB.setDirector(movie.getDirector());
+        movieInDB.setCountry(movie.getCountry());
+        movieInDB.setRating(movie.getRating());
+
+
+        movieService.updateMovie(movieInDB);
+        return "redirect:/admin/movie/" + id;
     }
 
     @PostMapping("/admin/movie/addMovie")
@@ -107,5 +139,19 @@ public class AdminMovieController {
         movie.getGenres().add(genre);
         movieService.updateMovie(movie);
         return "redirect:/admin/movie/" + movieId;
+    }
+
+    @PostMapping("/admin/movie/{id}/changeRating")
+    public String changeMovieRating (@PathVariable("id") long movieId, @RequestParam(value = "rating") String rating){
+        MovieEntity movie = movieService.getMovieById(movieId);
+        movie.setRating(rating);
+        movieService.updateMovie(movie);
+        return "redirect:/admin/movie/" + movieId;
+    }
+
+    @PostMapping("/admin/movie/{id}/disable")
+    public String disableMovie (@PathVariable Long id){
+        movieService.disableMovie(id);
+        return "redirect:/admin/movie";
     }
 }

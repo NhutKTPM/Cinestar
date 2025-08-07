@@ -1,9 +1,6 @@
 package com.da3.MovieTicket.repository;
 
-import com.da3.MovieTicket.entity.BillEntity;
-import com.da3.MovieTicket.entity.RegionEntity;
-import com.da3.MovieTicket.entity.ShowtimeEntity;
-import com.da3.MovieTicket.entity.UserEntity;
+import com.da3.MovieTicket.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +14,6 @@ public interface BillRepository extends JpaRepository<BillEntity, Long> {
     List<BillEntity> findAllByShowtime(ShowtimeEntity showtime);
 
     List<BillEntity> findByCreatedAtGreaterThanEqualAndEnabledOrderByCreatedAtAsc(LocalDateTime date, boolean enabled);
+
+    List<BillEntity> findAllByShowtimeMovieOrderByCreatedAtDesc(MovieEntity movie);
 }

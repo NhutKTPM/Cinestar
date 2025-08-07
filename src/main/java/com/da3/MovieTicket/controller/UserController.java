@@ -48,8 +48,14 @@ public class UserController {
     @GetMapping("/userprofile")
     String userProfile(Model model, @AuthenticationPrincipal CustomUserDetails currentUser) {
         model.addAttribute("user", currentUser.getUser());
-        model.addAttribute("bills", billService.getBillsByUser(currentUser.getUser()));
         return "user/user-profile";
+    }
+
+    @GetMapping("/userprofile/tickets")
+    String userTickets(Model model, @AuthenticationPrincipal CustomUserDetails currentUser) {
+        model.addAttribute("user", currentUser.getUser());
+        model.addAttribute("bills", billService.getBillsByUser(currentUser.getUser()));
+        return "user/user-tickets";
     }
 
     @GetMapping("/userprofile/giftcards/received")

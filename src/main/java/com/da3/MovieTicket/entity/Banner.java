@@ -28,4 +28,6 @@ public class Banner {
     private boolean enabled = true;
 
     private String banner;
+
+    private String link;
 }

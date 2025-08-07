@@ -1,12 +1,9 @@
 package com.da3.MovieTicket.service;
 
-import com.da3.MovieTicket.entity.CinemaEntity;
 import com.da3.MovieTicket.entity.MovieEntity;
-import com.da3.MovieTicket.repository.CinemaRepository;
 import com.da3.MovieTicket.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,9 +40,20 @@ public class MovieService {
         return movieRepository.findTop8ByEnabledTrueAndShowDateLessThanEqualOrderByShowDateDesc(today);
     }
 
+    public List<MovieEntity> getTop3CurrentlyShowingMovies() {
+        LocalDate today = LocalDate.now();
+
+        return movieRepository.findTop3ByEnabledTrueAndShowDateLessThanEqualOrderByShowDateDesc(today);
+    }
+
     public List<MovieEntity> getCurrentlyShowingMovies() {
         LocalDate today = LocalDate.now();
         return movieRepository.findByEnabledTrueAndShowDateLessThanEqualOrderByShowDateDesc(today);
+    }
+
+    public List<MovieEntity> getCurrentlyShowingMoviesByGenre(Long genreId) {
+        LocalDate today = LocalDate.now();
+        return movieRepository.findByEnabledTrueAndShowDateLessThanEqualAndGenresGenreIdOrderByShowDateDesc(today, genreId);
     }
 
     public List<MovieEntity> getTop8UpcomingMovies() {
@@ -59,6 +67,11 @@ public class MovieService {
         return movieRepository.findByEnabledTrueAndShowDateGreaterThanOrderByShowDateAsc(today);
     }
 
+    public List<MovieEntity> getUpcomingMoviesByGenre(Long genreId) {
+        LocalDate today = LocalDate.now();
+        return movieRepository.findByEnabledTrueAndShowDateGreaterThanAndGenresGenreIdOrderByShowDateDesc(today, genreId);
+    }
+
     public List<MovieEntity> getMoviesByGenre(Long genreId){
         return movieRepository.findByGenresGenreIdAndEnabledTrue(genreId);
     }
@@ -66,4 +79,12 @@ public class MovieService {
     public List<MovieEntity> searchMovie(String searchTerm){
         return movieRepository.findByMovieNameContainingIgnoreCaseAndEnabledTrue(searchTerm);
     }
+
+    public void disableMovie(Long id){
+        MovieEntity movie = getMovieById(id);
+        movie.setEnabled(!movie.isEnabled());
+        movieRepository.save(movie);
+    }
+
+
 }

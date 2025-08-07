@@ -18,16 +18,16 @@
 
 <div class="container bg-secondary-subtle p-4">
     <div class="row gx-5">
-        <div class="col-9">
+        <div class="col-12 col-lg-9 mb-5">
             <div class="row mb-3">
-                <div class="col-4">
+                <div class="col-12 col-sm-4">
                     <img
                             th:src="@{${movie.poster}}"
                             alt=""
                             class="w-100"
                     />
                 </div>
-                <div class="col-8">
+                <div class="col-12 col-sm-8">
                     <iframe
                             class="w-100 h-100"
                             th:src="@{'https://www.youtube.com/embed/' + ${movie.trailer}}"
@@ -43,7 +43,7 @@
 
             <h3 class="montserrat-bold">
                 <span th:text="${movie.movieName}">Từ Vũ Trụ John Wick: Ballerina</span>
-                <span class="badge text-bg-warning">P</span>
+                <span class="badge text-bg-warning" th:text="${movie.rating}">P</span>
             </h3>
             <div class="d-flex">
                 <div>
@@ -52,11 +52,16 @@
                 <div class="ms-4">
                     <i class="bi bi-calendar text-warning"></i>&nbsp; <span th:text="${movie.showDate}"></span>
                 </div>
+                <div class="ms-4" th:if="${averageRating != null}">
+                    <i class="bi bi-star-fill text-warning"></i>&nbsp; <span th:text="${averageRating}"></span>
+                </div>
             </div>
             <div><strong>Quốc gia:</strong> <span th:text="${movie.country}"></span></div>
             <div><strong>Thể loại:</strong>
                 <span th:each="genre,iterStat : ${movie.genres}">
-                        <span class="badge text-bg-light" th:text="${genre.genreName}"></span>
+                        <a th:href="@{/movie(genreId=${genre.genreId})}"
+                           class="badge text-bg-light text-decoration-none"
+                           th:text="${genre.genreName}"></a>
                 </span>
             </div>
             <div><strong>Đạo diễn:</strong> <span th:text="${movie.director}"></span></div>
@@ -77,7 +82,7 @@
             </h3>
 
             <div class="row" id="showtimes-section">
-                <div class="col-4 mb-3">
+                <div class="col-6 col-lg-4 mb-3">
                     <select id="regionSelect" class="form-select" aria-label="Region select">
                         <option selected value="">Toàn quốc</option>
                         <th:block th:each="region : ${regions}">
@@ -85,7 +90,7 @@
                         </th:block>
                     </select>
                 </div>
-                <div class="col-4 mb-3">
+                <div class="col-6 col-lg-4 mb-3">
                     <select id="cinemaSelect" class="form-select" aria-label="Cinema select">
                         <option selected value="">Tất cả rạp</option>
                     </select>
@@ -93,7 +98,7 @@
             </div>
 
 
-            <div th:if="${not #lists.isEmpty(showDates)}" class="d-flex column-gap-2 mb-3">
+            <div th:if="${not #lists.isEmpty(showDates)}" class="d-flex column-gap-2 mb-3 overflow-x-auto">
                 <div th:each="showDate : ${showDates}"
                      th:data-date="${#temporals.format(showDate, 'yyyy-MM-dd')}"
                      class="border border-warning-subtle rounded p-2 d-flex flex-column align-items-center show-date"
@@ -117,21 +122,43 @@
                 </div>
             </div>
 
+            <div class="mt-5"></div>
+            <hr>
+            <h3 class="montserrat-bold mt-"> Đánh giá phim </h3>
 
+            <div th:if="${#lists.isEmpty(bills)}" class="mb-3">
+                Chưa có đánh giá phim
+            </div>
+
+            <div th:each="rating : ${bills}">
+                <div class="card mb-3" th:if="${rating.rating != null}">
+                    <div class="card-body">
+                        <div th:text="${rating.user.fullName}" class="fw-bold"></div>
+                        <div><i class="bi bi-star-fill text-warning"></i>&nbsp;
+                            <span th:text="${rating.rating}"></span></div>
+                        <div th:text="${rating.comment}"></div>
+
+                    </div>
+                </div>
+            </div>
 
 
 
         </div>
 
-        <div class="col-3">
-            <h4 class="montserrat-bold mb-3">Tin tức</h4>
+        <div class="col-12 col-lg-3">
+            <h4 class="montserrat-bold mb-3">Phim đang chiếu</h4>
 
+            <div th:each="movie, iterStat: ${top3Movies}" th:if="${iterStat.index < 2}">
+                <div th:replace="~{fragments/movieCard :: movieCard(${movie})}"></div>
+            </div>
         </div>
     </div>
 
 </div>
 
 </main>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script th:inline="javascript">
     function loadCinemas(regionId) {

@@ -24,11 +24,15 @@
         <div class="carousel-inner">
             <div th:each="banner, iterStat: ${banners}"
                  th:class="${iterStat.first} ? 'carousel-item active' : 'carousel-item'">
-                <img
+                <a th:href="@{${banner.link != null and banner.link != '' ? banner.link : '#'}}"
+                   class="d-block w-100 h-100 ratio" style="--bs-aspect-ratio: 33.333%;">
+                    <img
                             th:src="@{${banner.banner}}"
-                            class="d-block w-100 h-100"
+                            class="object-fit-cover"
                             alt="..."
                     />
+                </a>
+
             </div>
         </div>
         <button
@@ -56,7 +60,7 @@
 <div class="container bg-secondary-subtle p-4">
     <h2 class="montserrat-display mb-3">Phim đang chiếu</h2>
     <div class="row row-gap-4 mb-3">
-        <div th:each="movie: ${topShowingMovies}" class="col-3">
+        <div th:each="movie: ${topShowingMovies}" class="col-6 col-lg-3">
             <div th:replace="~{fragments/movieCard :: movieCard(${movie})}"></div>
         </div>
     </div>
@@ -71,7 +75,7 @@
 
     <h2 class="montserrat-display mb-3">Phim sắp chiếu</h2>
     <div class="row row-gap-4 mb-3">
-        <div th:each="movie: ${topUpcomingMovies}" class="col-3">
+        <div th:each="movie: ${topUpcomingMovies}" class="col-6 col-lg-3">
             <div th:replace="~{fragments/movieCard :: movieCard(${movie})}"></div>
         </div>
     </div>
@@ -85,5 +89,7 @@
 </div>
 
 </main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+
 </body>
 </html>

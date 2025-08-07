@@ -1,6 +1,7 @@
 package com.da3.MovieTicket.service;
 
 import com.da3.MovieTicket.entity.BillEntity;
+import com.da3.MovieTicket.entity.MovieEntity;
 import com.da3.MovieTicket.entity.ShowtimeEntity;
 import com.da3.MovieTicket.entity.UserEntity;
 import com.da3.MovieTicket.repository.BillRepository;
@@ -33,12 +34,20 @@ public class BillService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid bill Id: " + id));
     }
 
+    public BillEntity updateBill(BillEntity bill){
+        return billRepository.save(bill);
+    }
+
     public List<BillEntity> getBillsByUser(UserEntity user){
         return billRepository.findAllByUserOrderByCreatedAtDesc(user);
     }
 
     public List<BillEntity> getBillsByShowtime(ShowtimeEntity showtime){
         return billRepository.findAllByShowtime(showtime);
+    }
+
+    public List<BillEntity> getBillsByMovie(MovieEntity movie){
+        return billRepository.findAllByShowtimeMovieOrderByCreatedAtDesc(movie);
     }
 
     public Long getTotalAllTimeEarnings() {
@@ -98,4 +107,6 @@ public class BillService {
 
         return movieRevenue;
     }
+
+
 }

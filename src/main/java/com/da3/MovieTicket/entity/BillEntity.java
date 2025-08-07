@@ -50,6 +50,9 @@ public class BillEntity {
 
     private String paymentMethod;
 
+    private Integer rating;
+    private String comment;
+
     public Long getTotalTicket(){
         Long total = 0L;
         // Add seats total

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -40,7 +41,7 @@ public class AdminConcessionController {
 
     @PostMapping("/admin/concession/addConcession")
     public String addConcession (ConcessionEntity newConcession,
-                                 @RequestParam(value = "imageFile", required = false) MultipartFile image){
+                                 @RequestParam(value = "imageFile", required = false) MultipartFile image) {
 
         if (image != null && !image.isEmpty()) {
             String posterUrl = fileService.handleFileUpload(image);

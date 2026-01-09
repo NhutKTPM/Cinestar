@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -33,7 +34,7 @@ public class AdminBannerController {
 
     @PostMapping("/admin/banner/addBanner")
     public String addBanner (Banner newBanner,
-                             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile){
+                             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) {
         if (imageFile != null && !imageFile.isEmpty()) {
             String imageUrl = fileService.handleFileUpload(imageFile);
             newBanner.setBanner(imageUrl);
